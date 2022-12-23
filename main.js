@@ -1,8 +1,7 @@
-const title = document.createElement('h1');
+// const title = document.createElement('h1');
+// title.innerHTML = "Tasks";
+// document.body.append(title);
 
-title.innerHTML = "tasks";
-
-document.body.append(title);
 const list = document.createElement('ul');
 
 const render = (arr) => {
