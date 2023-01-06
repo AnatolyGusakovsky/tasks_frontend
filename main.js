@@ -4,7 +4,7 @@ let addButton = document.getElementById("submit_btn");
 let incompleteTaskHolder = document.getElementById("incomplete-tasks");
 let completedTasksHolder = document.getElementById("completed-tasks");
 
-function addTask() {
+let addTask = function () {
   let task_text = document.getElementById("add_task_field").value
   let listItem = document.createElement("li");
   let label = document.createElement("label");
@@ -27,11 +27,12 @@ function addTask() {
   listItem.appendChild(editButton);
   listItem.appendChild(deleteButton);
   incompleteTaskHolder.appendChild(listItem);
+  bindTaskEvents(listItem, markTaskCompleted);
   addTaskField.value = "";
-  return listItem;
+  // return listItem;
 }
 
-function editTask() {
+let editTask = function () {
   let listItem = this.parentNode;
   let editInput = listItem.querySelector('input[type=text]');
   let label = listItem.querySelector("label");
@@ -48,12 +49,22 @@ function editTask() {
 
 addButton.addEventListener("click", addTask);
 
-function bindTaskEvents(taskListItem, checkBoxEventHandler) {
+let deleteTask = function () {
+  console.log("Delete Task...");
+
+  let listItem = this.parentNode;
+  let ul = listItem.parentNode;
+  //Remove the parent list item from the ul.
+  ul.removeChild(listItem);
+
+}
+
+let bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
   let editButton = taskListItem.querySelector("button.edit");
   let deleteButton = taskListItem.querySelector("button.delete");
   let checkBox = taskListItem.querySelector("input[type=checkbox]");
-  editButton.onclick = editTask();
-  deleteButton.onclick = deleteTask();
+  editButton.onclick = editTask;
+  deleteButton.onclick = deleteTask;
   checkBox.onchange = checkBoxEventHandler;
 }
 
@@ -78,12 +89,3 @@ for (let i = 0; i < completedTasksHolder.children.length; i++) {
   bindTaskEvents(completedTasksHolder.children[i], markTaskIncomplete);
 }
 
-let deleteTask = function () {
-  console.log("Delete Task...");
-
-  let listItem = this.parentNode;
-  let ul = listItem.parentNode;
-  //Remove the parent list item from the ul.
-  ul.removeChild(listItem);
-
-}
