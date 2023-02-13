@@ -1,8 +1,25 @@
 let tasks_arr = [];
-let addTaskField = document.getElementById("add_task_field");
-let addButton = document.getElementById("submit_btn");
-let incompleteTaskHolder = document.getElementById("incomplete-tasks");
-let completedTasksHolder = document.getElementById("completed-tasks");
+let tasks_container = document.getElementById("tasks");
+
+(function init(){
+  let addTaskField = document.createElement("input");
+  let addButton = document.createElement("button");
+  let incompleteTaskHolder = document.createElement("ul");
+  let completedTasksHolder = document.createElement("ul");
+
+  addTaskField.placeholder = "add_task_field";
+  addButton.innerText = 'ADD'
+  addButton.className = "add"
+  incompleteTaskHolder.className = 'incompleteTaskHolder'
+  completedTasksHolder.className = 'completedTasksHolder'
+  incompleteTaskHolder.title = 'Incomplete Tasks'
+  completedTasksHolder.title = 'Completed Tasks'
+
+  tasks_container.appendChild(addTaskField)
+  tasks_container.appendChild(addButton)
+  tasks_container.appendChild(incompleteTaskHolder)
+  tasks_container.appendChild(completedTasksHolder)
+})();
 
 let addTask = function () {
   let task_text = document.getElementById("add_task_field").value
