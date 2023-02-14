@@ -1,11 +1,33 @@
 let tasks_arr = [];
-let addTaskField = document.getElementById("add_task_field");
-let addButton = document.getElementById("submit_btn");
-let incompleteTaskHolder = document.getElementById("incomplete-tasks");
-let completedTasksHolder = document.getElementById("completed-tasks");
+let tasks_container = document.getElementById("tasks");
+let incompleteTaskHolder, completedTasksHolder
 
-let addTask = function () {
-  let task_text = document.getElementById("add_task_field").value
+(function init(){
+  let addTaskField = document.createElement("input");
+  let addButton = document.createElement("button");
+   incompleteTaskHolder = document.createElement("ul");
+   completedTasksHolder = document.createElement("ul");
+
+  addTaskField.id = "add_task_field";
+  addButton.innerText = 'ADD'
+  addButton.className = "add"
+  incompleteTaskHolder.className = 'incompleteTaskHolder'
+  completedTasksHolder.className = 'completedTasksHolder'
+  incompleteTaskHolder.title = 'Incomplete Tasks'
+  completedTasksHolder.title = 'Completed Tasks'
+
+  tasks_container.appendChild(addTaskField)
+  tasks_container.appendChild(addButton)
+  tasks_container.appendChild(incompleteTaskHolder)
+  tasks_container.appendChild(completedTasksHolder)
+
+  addButton.addEventListener("click", addTask);
+})();
+
+function addTask () {
+  console.log('Add task func!')
+  let add_task_field = document.getElementById("add_task_field")
+  let task_text = add_task_field.value
   let listItem = document.createElement("li");
   let label = document.createElement("label");
   let editInput = document.createElement("input");
@@ -28,7 +50,7 @@ let addTask = function () {
   listItem.appendChild(deleteButton);
   incompleteTaskHolder.appendChild(listItem);
   bindTaskEvents(listItem, markTaskCompleted);
-  addTaskField.value = "";
+  add_task_field.value = "";
   // return listItem;
 }
 
@@ -46,8 +68,6 @@ let editTask = function () {
   //toggle .editmode on the parent.
   listItem.classList.toggle("editMode");
 }
-
-addButton.addEventListener("click", addTask);
 
 let deleteTask = function () {
   console.log("Delete Task...");
