@@ -1,13 +1,14 @@
 let tasks_arr = [];
 let tasks_container = document.getElementById("tasks");
+let incompleteTaskHolder, completedTasksHolder
 
 (function init(){
   let addTaskField = document.createElement("input");
   let addButton = document.createElement("button");
-  let incompleteTaskHolder = document.createElement("ul");
-  let completedTasksHolder = document.createElement("ul");
+   incompleteTaskHolder = document.createElement("ul");
+   completedTasksHolder = document.createElement("ul");
 
-  addTaskField.placeholder = "add_task_field";
+  addTaskField.id = "add_task_field";
   addButton.innerText = 'ADD'
   addButton.className = "add"
   incompleteTaskHolder.className = 'incompleteTaskHolder'
@@ -19,10 +20,14 @@ let tasks_container = document.getElementById("tasks");
   tasks_container.appendChild(addButton)
   tasks_container.appendChild(incompleteTaskHolder)
   tasks_container.appendChild(completedTasksHolder)
+
+  addButton.addEventListener("click", addTask);
 })();
 
-let addTask = function () {
-  let task_text = document.getElementById("add_task_field").value
+function addTask () {
+  console.log('Add task func!')
+  let add_task_field = document.getElementById("add_task_field")
+  let task_text = add_task_field.value
   let listItem = document.createElement("li");
   let label = document.createElement("label");
   let editInput = document.createElement("input");
@@ -45,7 +50,7 @@ let addTask = function () {
   listItem.appendChild(deleteButton);
   incompleteTaskHolder.appendChild(listItem);
   bindTaskEvents(listItem, markTaskCompleted);
-  addTaskField.value = "";
+  add_task_field.value = "";
   // return listItem;
 }
 
@@ -63,8 +68,6 @@ let editTask = function () {
   //toggle .editmode on the parent.
   listItem.classList.toggle("editMode");
 }
-
-addButton.addEventListener("click", addTask);
 
 let deleteTask = function () {
   console.log("Delete Task...");
