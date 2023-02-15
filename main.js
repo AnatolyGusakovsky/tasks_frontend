@@ -7,7 +7,11 @@ let incompleteTaskHolder, completedTasksHolder
   let addButton = document.createElement("button");
    incompleteTaskHolder = document.createElement("ul");
    completedTasksHolder = document.createElement("ul");
+   let todo_header = document.createElement('h3')
+   let completed_tasks_header = document.createElement('h3')
 
+  todo_header.textContent = 'To Do'
+  completed_tasks_header.textContent = 'Completed'
   addTaskField.id = "add_task_field";
   addButton.innerText = 'ADD'
   addButton.className = "add"
@@ -18,7 +22,9 @@ let incompleteTaskHolder, completedTasksHolder
 
   tasks_container.appendChild(addTaskField)
   tasks_container.appendChild(addButton)
+  tasks_container.appendChild(todo_header)
   tasks_container.appendChild(incompleteTaskHolder)
+  tasks_container.appendChild(completed_tasks_header)
   tasks_container.appendChild(completedTasksHolder)
 
   addButton.addEventListener("click", addTask);
