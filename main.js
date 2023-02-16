@@ -1,14 +1,14 @@
 let tasks_arr = [];
 let tasks_container = document.getElementById("tasks");
-let incompleteTaskHolder, completedTasksHolder
+let incompleteTaskHolder, completedTasksHolder, editButton
 
-(function init(){
+(function init() {
   let addTaskField = document.createElement("input");
   let addButton = document.createElement("button");
-   incompleteTaskHolder = document.createElement("ul");
-   completedTasksHolder = document.createElement("ul");
-   let todo_header = document.createElement('h3')
-   let completed_tasks_header = document.createElement('h3')
+  incompleteTaskHolder = document.createElement("ul");
+  completedTasksHolder = document.createElement("ul");
+  let todo_header = document.createElement('h3')
+  let completed_tasks_header = document.createElement('h3')
 
   todo_header.textContent = 'To Do'
   completed_tasks_header.textContent = 'Completed'
@@ -30,14 +30,14 @@ let incompleteTaskHolder, completedTasksHolder
   addButton.addEventListener("click", addTask);
 })();
 
-function addTask () {
+function addTask() {
   console.log('Add task func!')
   let add_task_field = document.getElementById("add_task_field")
   let task_text = add_task_field.value
   let listItem = document.createElement("li");
   let label = document.createElement("label");
   let editInput = document.createElement("input");
-  let editButton = document.createElement("button");
+  editButton = document.createElement("button");
   let deleteButton = document.createElement("button");
   let checkBox = document.createElement("input");
 
@@ -57,7 +57,6 @@ function addTask () {
   incompleteTaskHolder.appendChild(listItem);
   bindTaskEvents(listItem, markTaskCompleted);
   add_task_field.value = "";
-  // return listItem;
 }
 
 let editTask = function () {
@@ -66,21 +65,18 @@ let editTask = function () {
   let label = listItem.querySelector("label");
   let editMode = listItem.classList.contains("editMode");
   if (editMode) {
+    editButton.innerText = 'Edit'
     label.innerText = editInput.value;
   } else {
+    editButton.innerText = 'Save'
     editInput.value = label.innerText;
   }
-
-  //toggle .editmode on the parent.
   listItem.classList.toggle("editMode");
 }
 
 let deleteTask = function () {
-  console.log("Delete Task...");
-
   let listItem = this.parentNode;
   let ul = listItem.parentNode;
-  //Remove the parent list item from the ul.
   ul.removeChild(listItem);
 
 }
