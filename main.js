@@ -1,6 +1,6 @@
 let tasks_arr = [];
 let tasks_container = document.getElementById("tasks");
-let incompleteTaskHolder, completedTasksHolder, editButton
+let incompleteTaskHolder, completedTasksHolder
 
 (function init() {
   let addTaskField = document.createElement("input");
@@ -16,8 +16,10 @@ let incompleteTaskHolder, completedTasksHolder, editButton
   addButton.innerText = 'ADD'
   addButton.className = "add"
   incompleteTaskHolder.className = 'incompleteTaskHolder'
-  completedTasksHolder.className = 'completedTasksHolder'
   incompleteTaskHolder.title = 'Incomplete Tasks'
+  incompleteTaskHolder.id = 'incomplete-tasks'
+  completedTasksHolder.className = 'completedTasksHolder'
+  completedTasksHolder.id = 'completed-tasks'
   completedTasksHolder.title = 'Completed Tasks'
 
   tasks_container.appendChild(addTaskField)
@@ -37,7 +39,7 @@ function addTask() {
   let listItem = document.createElement("li");
   let label = document.createElement("label");
   let editInput = document.createElement("input");
-  editButton = document.createElement("button");
+  let editButton = document.createElement("button");
   let deleteButton = document.createElement("button");
   let checkBox = document.createElement("input");
 
@@ -63,6 +65,7 @@ let editTask = function () {
   let listItem = this.parentNode;
   let editInput = listItem.querySelector('input[type=text]');
   let label = listItem.querySelector("label");
+  let editButton = listItem.querySelector("[class=edit]");
   let editMode = listItem.classList.contains("editMode");
   if (editMode) {
     editButton.innerText = 'Edit'
@@ -89,7 +92,6 @@ let bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
   deleteButton.onclick = deleteTask;
   checkBox.onchange = checkBoxEventHandler;
 }
-
 
 let markTaskCompleted = function () {
   let listItem = this.parentNode;

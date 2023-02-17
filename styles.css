@@ -104,6 +104,10 @@ li > .delete:hover {
     color: #888;
 }
 
+#completed-tasks .edit {
+    display: none
+}
+
 /* Edit Task */
 ul li input[type=text] {
     display:none;
