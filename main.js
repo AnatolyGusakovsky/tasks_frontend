@@ -1,6 +1,8 @@
 let tasks_arr = [];
 let tasks_container = document.getElementById("tasks");
 let incompleteTaskHolder, completedTasksHolder
+let todo_tasks = [];
+let completed_tasks = [];
 
 (function init() {
   let addTaskField = document.createElement("input");
@@ -35,7 +37,7 @@ let incompleteTaskHolder, completedTasksHolder
 function addTask() {
   console.log('Add task func!')
   let add_task_field = document.getElementById("add_task_field")
-  let task_text = add_task_field.value
+  let task_text = add_task_field.value.trim()
   let listItem = document.createElement("li");
   let label = document.createElement("label");
   let editInput = document.createElement("input");
@@ -56,8 +58,15 @@ function addTask() {
   listItem.appendChild(editInput);
   listItem.appendChild(editButton);
   listItem.appendChild(deleteButton);
-  incompleteTaskHolder.appendChild(listItem);
-  bindTaskEvents(listItem, markTaskCompleted);
+  if (task_text.length > 0){
+    incompleteTaskHolder.appendChild(listItem);
+    bindTaskEvents(listItem, markTaskCompleted);
+    todo_tasks.push({
+      id: generate_id(),
+      text: task_text,
+      isCompleted: false
+    })
+  }
   add_task_field.value = "";
 }
 
@@ -111,5 +120,9 @@ for (let i = 0; i < incompleteTaskHolder.children.length; i++) {
 
 for (let i = 0; i < completedTasksHolder.children.length; i++) {
   bindTaskEvents(completedTasksHolder.children[i], markTaskIncomplete);
+}
+
+ function generate_id(length = 6) {
+  return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
