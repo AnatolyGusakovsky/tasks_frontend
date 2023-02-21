@@ -126,3 +126,6 @@ for (let i = 0; i < completedTasksHolder.children.length; i++) {
   return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
+function delete_all_tasks_from(given_ul){
+
+}
