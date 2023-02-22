@@ -1,8 +1,8 @@
-let tasks_arr = [];
-let tasks_container = document.getElementById("tasks");
 let incompleteTaskHolder, completedTasksHolder
 let todo_tasks = [];
 let completed_tasks = [];
+let tasks_container = document.getElementById("tasks");
+// const incomplete_tasks = document.getElementById("incomplete-tasks");
 
 (function init() {
   let addTaskField = document.createElement("input");
@@ -103,9 +103,10 @@ let bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
 }
 
 let markTaskCompleted = function () {
-  let listItem = this.parentNode;
-  completedTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, markTaskIncomplete);
+  delete_all_incompleted_tasks()
+  // let listItem = this.parentNode;
+  // completedTasksHolder.appendChild(listItem);
+  // bindTaskEvents(listItem, markTaskIncomplete);
 }
 
 let markTaskIncomplete = function () {
@@ -126,3 +127,11 @@ for (let i = 0; i < completedTasksHolder.children.length; i++) {
   return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
+function delete_all_incompleted_tasks(){
+  const incompleted_tasks = document.getElementById("incomplete-tasks")
+  console.log(incompleted_tasks)
+  while(incompleted_tasks.firstChild){
+    incompleted_tasks.removeChild(incompleted_tasks.firstChild)
+  }
+  console.log(incompleted_tasks)
+}
