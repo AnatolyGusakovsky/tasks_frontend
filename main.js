@@ -103,10 +103,9 @@ let bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
 }
 
 let markTaskCompleted = function () {
-  delete_all_incompleted_tasks()
-  // let listItem = this.parentNode;
-  // completedTasksHolder.appendChild(listItem);
-  // bindTaskEvents(listItem, markTaskIncomplete);
+  let listItem = this.parentNode;
+  completedTasksHolder.appendChild(listItem);
+  bindTaskEvents(listItem, markTaskIncomplete);
 }
 
 let markTaskIncomplete = function () {
