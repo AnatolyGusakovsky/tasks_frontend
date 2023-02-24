@@ -134,3 +134,12 @@ function delete_all_incompleted_tasks(){
   }
   console.log(incompleted_tasks)
 }
+
+function delete_all_completed_tasks(){
+  const completed_tasks = document.getElementById("completed-tasks")
+  console.log(completed_tasks)
+  while(completed_tasks.firstChild){
+    completed_tasks.removeChild(completed_tasks.firstChild)
+  }
+  console.log(completed_tasks)
+}
