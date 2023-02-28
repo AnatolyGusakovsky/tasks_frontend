@@ -84,6 +84,9 @@ let bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
 
 let markTaskCompleted = function () {
   let listItem = this.parentNode;
+  let id = listItem.attributes.id
+  console.log('listItem: ')
+  console.log(id.value)
   completedTasksHolder.appendChild(listItem);
   bindTaskEvents(listItem, markTaskIncomplete);
 }
