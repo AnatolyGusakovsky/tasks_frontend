@@ -84,6 +84,25 @@ let bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
 
 let markTaskCompleted = function () {
   let listItem = this.parentNode;
+  let id = listItem.attributes.id.value
+  let task_text = listItem.querySelector("label").innerText;
+  let index;
+  todo_tasks.forEach((el, ind)=>{
+    if(el.id === id)
+      index = ind;
+  })
+  todo_tasks.splice(index, 1)
+  delete_all_todo_tasks()
+  render_todo_tasks()
+
+  completed_tasks.push({
+    id: id,
+    text: task_text,
+    isCompleted: true
+  })
+
+  delete_all_completed_tasks()
+  // todo: render_all_completed_tasks
   completedTasksHolder.appendChild(listItem);
   bindTaskEvents(listItem, markTaskIncomplete);
 }
