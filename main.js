@@ -103,8 +103,9 @@ let markTaskCompleted = function () {
 
   delete_all_completed_tasks()
   // todo: render_all_completed_tasks
-  completedTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, markTaskIncomplete);
+  // completedTasksHolder.appendChild(listItem);
+  // bindTaskEvents(listItem, markTaskIncomplete);
+  render_completed_tasks()
 }
 
 let markTaskIncomplete = function () {
@@ -155,6 +156,29 @@ function render_todo_tasks() {
   })
 }
 
+function render_completed_tasks() {
+  completed_tasks.forEach(task=>{
+    console.log(`rendering ${task.text} task [completed]`)
+    let listItem = document.createElement("li");
+    let label = document.createElement("label");
+    let deleteButton = document.createElement("button");
+    let checkBox = document.createElement("input");
+
+    label.innerText = task.text;
+    listItem.id = task.id
+    checkBox.type = "checkbox";
+    deleteButton.innerText = "Delete";
+    deleteButton.className = "delete";
+
+    listItem.appendChild(checkBox);
+    listItem.appendChild(label);
+    listItem.appendChild(deleteButton);
+
+    completedTasksHolder.appendChild(listItem);
+    bindTaskEvents(listItem, markTaskIncomplete);
+  })
+}
+
 function delete_all_todo_tasks() {
   console.log('deleting_all_todo_tasks')
   const incompleted_tasks = document.getElementById("incomplete-tasks")
@@ -164,10 +188,9 @@ function delete_all_todo_tasks() {
 }
 
 function delete_all_completed_tasks() {
+  console.log("completed_tasks deletion")
   const completed_tasks = document.getElementById("completed-tasks")
-  console.log(completed_tasks)
   while (completed_tasks.firstChild) {
     completed_tasks.removeChild(completed_tasks.firstChild)
   }
-  console.log(completed_tasks)
 }
