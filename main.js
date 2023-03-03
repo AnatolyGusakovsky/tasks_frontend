@@ -2,7 +2,6 @@ let incompleteTaskHolder, completedTasksHolder
 let todo_tasks = [];
 let completed_tasks = [];
 let tasks_container = document.getElementById("tasks");
-// const incomplete_tasks = document.getElementById("incomplete-tasks");
 
 (function init() {
   let addTaskField = document.createElement("input");
@@ -73,13 +72,20 @@ let deleteTask = function () {
 
 }
 
-let bindTaskEvents = function (taskListItem, checkBoxEventHandler) {
-  let editButton = taskListItem.querySelector("button.edit");
-  let deleteButton = taskListItem.querySelector("button.delete");
-  let checkBox = taskListItem.querySelector("input[type=checkbox]");
-  editButton.onclick = editTask;
-  deleteButton.onclick = deleteTask;
-  checkBox.onchange = checkBoxEventHandler;
+let bindTaskEvents = function (taskListItem, checkBoxEventHandler, completed = false) {
+  if (completed) {
+    let deleteButton = taskListItem.querySelector("button.delete");
+    let checkBox = taskListItem.querySelector("input[type=checkbox]");
+    deleteButton.onclick = deleteTask;
+    checkBox.onchange = checkBoxEventHandler;
+  } else {
+    let editButton = taskListItem.querySelector("button.edit");
+    let deleteButton = taskListItem.querySelector("button.delete");
+    let checkBox = taskListItem.querySelector("input[type=checkbox]");
+    editButton.onclick = editTask;
+    deleteButton.onclick = deleteTask;
+    checkBox.onchange = checkBoxEventHandler;
+  }
 }
 
 let markTaskCompleted = function () {
@@ -87,8 +93,8 @@ let markTaskCompleted = function () {
   let id = listItem.attributes.id.value
   let task_text = listItem.querySelector("label").innerText;
   let index;
-  todo_tasks.forEach((el, ind)=>{
-    if(el.id === id)
+  todo_tasks.forEach((el, ind) => {
+    if (el.id === id)
       index = ind;
   })
   todo_tasks.splice(index, 1)
@@ -102,15 +108,30 @@ let markTaskCompleted = function () {
   })
 
   delete_all_completed_tasks()
-  // todo: render_all_completed_tasks
-  completedTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, markTaskIncomplete);
+  render_completed_tasks()
 }
 
 let markTaskIncomplete = function () {
   let listItem = this.parentNode;
-  incompleteTaskHolder.appendChild(listItem);
-  bindTaskEvents(listItem, markTaskCompleted);
+  let id = listItem.attributes.id.value
+  let task_text = listItem.querySelector("label").innerText;
+  let index;
+  completed_tasks.forEach((el, ind) => {
+    if (el.id === id)
+      index = ind;
+  })
+  completed_tasks.splice(index, 1)
+  delete_all_completed_tasks()
+  render_completed_tasks()
+
+  todo_tasks.push({
+    id: id,
+    text: task_text,
+    isCompleted: false
+  })
+
+  delete_all_todo_tasks()
+  render_todo_tasks()
 }
 
 for (let i = 0; i < incompleteTaskHolder.children.length; i++) {
@@ -126,8 +147,8 @@ function generate_id(length = 6) {
 }
 
 function render_todo_tasks() {
+  console.log(`rendering todo tasks`)
   todo_tasks.forEach(task => {
-    console.log(`rendering ${task.text} task`)
     let listItem = document.createElement("li");
     let label = document.createElement("label");
     let editInput = document.createElement("input");
@@ -155,6 +176,29 @@ function render_todo_tasks() {
   })
 }
 
+function render_completed_tasks() {
+  console.log(`rendering completed tasks`)
+  completed_tasks.forEach(task => {
+    let listItem = document.createElement("li");
+    let label = document.createElement("label");
+    let deleteButton = document.createElement("button");
+    let checkBox = document.createElement("input");
+
+    label.innerText = task.text;
+    listItem.id = task.id
+    checkBox.type = "checkbox";
+    deleteButton.innerText = "Delete";
+    deleteButton.className = "delete";
+
+    listItem.appendChild(checkBox);
+    listItem.appendChild(label);
+    listItem.appendChild(deleteButton);
+
+    completedTasksHolder.appendChild(listItem);
+    bindTaskEvents(listItem, markTaskIncomplete, true);
+  })
+}
+
 function delete_all_todo_tasks() {
   console.log('deleting_all_todo_tasks')
   const incompleted_tasks = document.getElementById("incomplete-tasks")
@@ -164,10 +208,9 @@ function delete_all_todo_tasks() {
 }
 
 function delete_all_completed_tasks() {
+  console.log("completed_tasks deletion")
   const completed_tasks = document.getElementById("completed-tasks")
-  console.log(completed_tasks)
   while (completed_tasks.firstChild) {
     completed_tasks.removeChild(completed_tasks.firstChild)
   }
-  console.log(completed_tasks)
 }
