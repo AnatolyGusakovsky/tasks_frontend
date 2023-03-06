@@ -1,37 +1,36 @@
 import {Tasks_store} from "./tasks_store.js";
-
-let incompleteTaskHolder, completedTasksHolder
-let todo_tasks = [];
-let completed_tasks = [];
+import {Render} from "./render.js";
+let incomplete_tasks_holder, completed_tasks_holder
 let tasks_container = document.getElementById("tasks");
 const tasks_store = new Tasks_store();
+const render = new Render();
 
 (function init() {
-  let addTaskField = document.createElement("input");
-  let addButton = document.createElement("button");
-  incompleteTaskHolder = document.createElement("ul");
-  completedTasksHolder = document.createElement("ul");
-  let todo_header = document.createElement('h3')
-  let completed_tasks_header = document.createElement('h3')
+  const addTaskField = document.createElement("input");
+  const addButton = document.createElement("button");
+  incomplete_tasks_holder = document.createElement("ul");
+  completed_tasks_holder = document.createElement("ul");
+  const todo_header = document.createElement('h3')
+  const completed_tasks_header = document.createElement('h3')
 
   todo_header.textContent = 'To Do'
   completed_tasks_header.textContent = 'Completed'
   addTaskField.id = "add_task_field";
   addButton.innerText = 'ADD'
   addButton.className = "add"
-  incompleteTaskHolder.className = 'incompleteTaskHolder'
-  incompleteTaskHolder.title = 'Incomplete Tasks'
-  incompleteTaskHolder.id = 'incomplete-tasks'
-  completedTasksHolder.className = 'completedTasksHolder'
-  completedTasksHolder.id = 'completed-tasks'
-  completedTasksHolder.title = 'Completed Tasks'
+  incomplete_tasks_holder.className = 'incomplete_tasks_holder'
+  incomplete_tasks_holder.title = 'Incomplete Tasks'
+  incomplete_tasks_holder.id = 'incomplete-tasks'
+  completed_tasks_holder.className = 'completed_tasks_holder'
+  completed_tasks_holder.id = 'completed-tasks'
+  completed_tasks_holder.title = 'Completed Tasks'
 
   tasks_container.appendChild(addTaskField)
   tasks_container.appendChild(addButton)
   tasks_container.appendChild(todo_header)
-  tasks_container.appendChild(incompleteTaskHolder)
+  tasks_container.appendChild(incomplete_tasks_holder)
   tasks_container.appendChild(completed_tasks_header)
-  tasks_container.appendChild(completedTasksHolder)
+  tasks_container.appendChild(completed_tasks_holder)
 
   addButton.addEventListener("click", addTask);
 })();
@@ -48,16 +47,16 @@ function addTask() {
     })
   }
   add_task_field.value = "";
-  delete_all_todo_tasks_from_the_DOM()
-  render_todo_tasks()
+  render.delete_all_todo_tasks_from_the_DOM()
+  render.render_todo_tasks(tasks_store.get_todo_tasks())
 }
 
 let editTask = function () {
-  let listItem = this.parentNode;
-  let editInput = listItem.querySelector('input[type=text]');
-  let label = listItem.querySelector("label");
-  let editButton = listItem.querySelector("[class=edit]");
-  let editMode = listItem.classList.contains("editMode");
+  const listItem = this.parentNode;
+  const editInput = listItem.querySelector('input[type=text]');
+  const label = listItem.querySelector("label");
+  const editButton = listItem.querySelector("[class=edit]");
+  const editMode = listItem.classList.contains("editMode");
   if (editMode) {
     editButton.innerText = 'Edit'
     label.innerText = editInput.value;
@@ -70,134 +69,23 @@ let editTask = function () {
 
 let deleteTask = function () {
   let listItem = this.parentNode;
-  let ul = listItem.parentNode;
-  ul.removeChild(listItem);
-
-}
-
-let bindTaskEvents = function (taskListItem, checkBoxEventHandler, completed = false) {
-  if (completed) {
-    let deleteButton = taskListItem.querySelector("button.delete");
-    let checkBox = taskListItem.querySelector("input[type=checkbox]");
-    deleteButton.onclick = deleteTask;
-    checkBox.onchange = checkBoxEventHandler;
-  } else {
-    let editButton = taskListItem.querySelector("button.edit");
-    let deleteButton = taskListItem.querySelector("button.delete");
-    let checkBox = taskListItem.querySelector("input[type=checkbox]");
-    editButton.onclick = editTask;
-    deleteButton.onclick = deleteTask;
-    checkBox.onchange = checkBoxEventHandler;
-  }
-}
-
-let markTaskCompleted = function () {
-  let listItem = this.parentNode;
   let id = listItem.attributes.id.value
-
-  tasks_store.get_todo_tasks().forEach(el => {
-    if (el.id === id)
-      el.is_completed = true;
-  })
-  rerender_all_tasks_in_DOM()
+  tasks_store.delete_task(id)
+  render.rerender_all_tasks_in_DOM()
 }
 
-let markTaskIncomplete = function () {
-  let listItem = this.parentNode;
-  let id = listItem.attributes.id.value
-
-  tasks_store.get_completed_tasks().forEach(el => {
-    if (el.id === id)
-      el.is_completed = false;
-  })
-  rerender_all_tasks_in_DOM()
+for (let i = 0; i < incomplete_tasks_holder.children.length; i++) {
+  console.log('WOW HERE 1')
+  render.bind_task_events(incomplete_tasks_holder.children[i], render.mark_task_completed(incomplete_tasks_holder, completed_tasks_holder, tasks_store));
 }
 
-for (let i = 0; i < incompleteTaskHolder.children.length; i++) {
-  bindTaskEvents(incompleteTaskHolder.children[i], markTaskCompleted);
-}
-
-for (let i = 0; i < completedTasksHolder.children.length; i++) {
-  bindTaskEvents(completedTasksHolder.children[i], markTaskIncomplete);
+for (let i = 0; i < completed_tasks_holder.children.length; i++) {
+  console.log('WOW HERE 2')
+  render.bind_task_events(completed_tasks_holder.children[i], render.mark_task_incomplete(incomplete_tasks_holder, completed_tasks_holder, tasks_store));
 }
 
 function generate_id(length = 6) {
   return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
-function render_todo_tasks() {
-  console.log(`rendering todo tasks`)
-  console.log(tasks_store.get_all_tasks())
-  tasks_store.get_todo_tasks().forEach(task => {
-    let listItem = document.createElement("li");
-    let label = document.createElement("label");
-    let editInput = document.createElement("input");
-    let editButton = document.createElement("button");
-    let deleteButton = document.createElement("button");
-    let checkBox = document.createElement("input");
 
-    label.innerText = task.text;
-    listItem.id = task.id
-    editInput.type = "text";
-    checkBox.type = "checkbox";
-    editButton.innerText = "Edit";
-    editButton.className = "edit";
-    deleteButton.innerText = "Delete";
-    deleteButton.className = "delete";
-
-    listItem.appendChild(checkBox);
-    listItem.appendChild(label);
-    listItem.appendChild(editInput);
-    listItem.appendChild(editButton);
-    listItem.appendChild(deleteButton);
-
-    incompleteTaskHolder.appendChild(listItem);
-    bindTaskEvents(listItem, markTaskCompleted);
-  })
-}
-
-function render_completed_tasks() {
-  console.log(`rendering completed tasks`)
-  tasks_store.get_completed_tasks().forEach(task => {
-    let listItem = document.createElement("li");
-    let label = document.createElement("label");
-    let deleteButton = document.createElement("button");
-    let checkBox = document.createElement("input");
-
-    label.innerText = task.text;
-    listItem.id = task.id
-    checkBox.type = "checkbox";
-    deleteButton.innerText = "Delete";
-    deleteButton.className = "delete";
-
-    listItem.appendChild(checkBox);
-    listItem.appendChild(label);
-    listItem.appendChild(deleteButton);
-
-    completedTasksHolder.appendChild(listItem);
-    bindTaskEvents(listItem, markTaskIncomplete, true);
-  })
-}
-
-function delete_all_todo_tasks_from_the_DOM() {
-  console.log('deleting_all_todo_tasks')
-  const incompleted_tasks = document.getElementById("incomplete-tasks")
-  while (incompleted_tasks.firstChild) {
-    incompleted_tasks.removeChild(incompleted_tasks.firstChild)
-  }
-}
-
-function delete_all_completed_tasks_from_the_DOM() {
-  console.log("completed_tasks deletion")
-  const completed_tasks = document.getElementById("completed-tasks")
-  while (completed_tasks.firstChild) {
-    completed_tasks.removeChild(completed_tasks.firstChild)
-  }
-}
-
-function rerender_all_tasks_in_DOM() {
-  delete_all_todo_tasks_from_the_DOM()
-  render_todo_tasks()
-  delete_all_completed_tasks_from_the_DOM()
-  render_completed_tasks()
-}

@@ -12,16 +12,6 @@ export class Tasks_store extends Task {
   }
 
   get_todo_tasks() {
-    // for testing only - filling store with test data
-    // for (let i = 0; i < 5; i++) {
-    //   let is_completed = i % 2 === 0;
-    //   Tasks_store.store.push({
-    //     id: i,
-    //     text: `text of ${i} task`,
-    //     is_completed: is_completed
-    //   })
-    // }
-    // ----
     let todo_tasks = [];
     Tasks_store.store.forEach(task => {
       if (task.is_completed === false)
@@ -43,8 +33,13 @@ export class Tasks_store extends Task {
     Tasks_store.store.push(task)
   }
 
-  delete_task(id){
-    //todo: add deletion logic, ingest it to the DOM deletion logic in main.js
+  delete_task(id) {
+    let index;
+    this.get_todo_tasks().forEach((el, i) => {
+      if (el.id === id)
+        index = i;
+    })
+    Tasks_store.store.splice(index, 1)
   }
 }
 
