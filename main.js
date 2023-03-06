@@ -1,7 +1,10 @@
+import {Tasks_store} from "./tasks_store.js";
+
 let incompleteTaskHolder, completedTasksHolder
 let todo_tasks = [];
 let completed_tasks = [];
 let tasks_container = document.getElementById("tasks");
+const tasks_store = new Tasks_store();
 
 (function init() {
   let addTaskField = document.createElement("input");
@@ -38,14 +41,14 @@ function addTask() {
   let add_task_field = document.getElementById("add_task_field")
   let task_text = add_task_field.value.trim()
   if (task_text.length > 0) {
-    todo_tasks.push({
+    tasks_store.add_task({
       id: id,
       text: task_text,
-      isCompleted: false
+      is_completed: false
     })
   }
   add_task_field.value = "";
-  delete_all_todo_tasks()
+  delete_all_todo_tasks_from_the_DOM()
   render_todo_tasks()
 }
 
@@ -91,47 +94,23 @@ let bindTaskEvents = function (taskListItem, checkBoxEventHandler, completed = f
 let markTaskCompleted = function () {
   let listItem = this.parentNode;
   let id = listItem.attributes.id.value
-  let task_text = listItem.querySelector("label").innerText;
-  let index;
-  todo_tasks.forEach((el, ind) => {
+
+  tasks_store.get_todo_tasks().forEach(el => {
     if (el.id === id)
-      index = ind;
+      el.is_completed = true;
   })
-  todo_tasks.splice(index, 1)
-  delete_all_todo_tasks()
-  render_todo_tasks()
-
-  completed_tasks.push({
-    id: id,
-    text: task_text,
-    isCompleted: true
-  })
-
-  delete_all_completed_tasks()
-  render_completed_tasks()
+  rerender_all_tasks_in_DOM()
 }
 
 let markTaskIncomplete = function () {
   let listItem = this.parentNode;
   let id = listItem.attributes.id.value
-  let task_text = listItem.querySelector("label").innerText;
-  let index;
-  completed_tasks.forEach((el, ind) => {
+
+  tasks_store.get_completed_tasks().forEach(el => {
     if (el.id === id)
-      index = ind;
+      el.is_completed = false;
   })
-  completed_tasks.splice(index, 1)
-  delete_all_completed_tasks()
-  render_completed_tasks()
-
-  todo_tasks.push({
-    id: id,
-    text: task_text,
-    isCompleted: false
-  })
-
-  delete_all_todo_tasks()
-  render_todo_tasks()
+  rerender_all_tasks_in_DOM()
 }
 
 for (let i = 0; i < incompleteTaskHolder.children.length; i++) {
@@ -148,7 +127,8 @@ function generate_id(length = 6) {
 
 function render_todo_tasks() {
   console.log(`rendering todo tasks`)
-  todo_tasks.forEach(task => {
+  console.log(tasks_store.get_all_tasks())
+  tasks_store.get_todo_tasks().forEach(task => {
     let listItem = document.createElement("li");
     let label = document.createElement("label");
     let editInput = document.createElement("input");
@@ -178,7 +158,7 @@ function render_todo_tasks() {
 
 function render_completed_tasks() {
   console.log(`rendering completed tasks`)
-  completed_tasks.forEach(task => {
+  tasks_store.get_completed_tasks().forEach(task => {
     let listItem = document.createElement("li");
     let label = document.createElement("label");
     let deleteButton = document.createElement("button");
@@ -199,7 +179,7 @@ function render_completed_tasks() {
   })
 }
 
-function delete_all_todo_tasks() {
+function delete_all_todo_tasks_from_the_DOM() {
   console.log('deleting_all_todo_tasks')
   const incompleted_tasks = document.getElementById("incomplete-tasks")
   while (incompleted_tasks.firstChild) {
@@ -207,10 +187,17 @@ function delete_all_todo_tasks() {
   }
 }
 
-function delete_all_completed_tasks() {
+function delete_all_completed_tasks_from_the_DOM() {
   console.log("completed_tasks deletion")
   const completed_tasks = document.getElementById("completed-tasks")
   while (completed_tasks.firstChild) {
     completed_tasks.removeChild(completed_tasks.firstChild)
   }
+}
+
+function rerender_all_tasks_in_DOM() {
+  delete_all_todo_tasks_from_the_DOM()
+  render_todo_tasks()
+  delete_all_completed_tasks_from_the_DOM()
+  render_completed_tasks()
 }
