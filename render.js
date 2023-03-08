@@ -74,7 +74,8 @@ export class Render {
     }
   }
 
-  bind_task_events (taskListItem, checkBoxEventHandler, completed = false) {
+  bind_task_events(taskListItem, checkBoxEventHandler, completed = false) {
+    // todo: this potentially can be moved to render methods
     if (completed) {
       let deleteButton = taskListItem.querySelector("button.delete");
       let checkBox = taskListItem.querySelector("input[type=checkbox]");
@@ -90,7 +91,8 @@ export class Render {
     }
   }
 
-  mark_task_completed (incomplete_tasks_holder, completed_tasks_holder, tasks_store) {
+  mark_task_completed(incomplete_tasks_holder, completed_tasks_holder, tasks_store) {
+    // todo: this function shouldn't be in render class
     let listItem = this.parentNode;
     let id = listItem.attributes.id.value
 
@@ -101,7 +103,8 @@ export class Render {
     this.rerender_all_tasks_in_DOM(incomplete_tasks_holder, completed_tasks_holder)
   }
 
-   mark_task_incomplete (incomplete_tasks_holder, completed_tasks_holder, tasks_store) {
+  mark_task_incomplete(incomplete_tasks_holder, completed_tasks_holder, tasks_store) {
+    // todo: this function shouldn't be in render class
     let listItem = this.parentNode;
     let id = listItem.attributes.id.value
 
@@ -109,6 +112,6 @@ export class Render {
       if (el.id === id)
         el.is_completed = false;
     })
-     this.rerender_all_tasks_in_DOM(incomplete_tasks_holder, completed_tasks_holder)
+    this.rerender_all_tasks_in_DOM(incomplete_tasks_holder, completed_tasks_holder)
   }
 }

@@ -41,5 +41,7 @@ export class Tasks_store extends Task {
     })
     Tasks_store.store.splice(index, 1)
   }
+
+  // todo: add edit_task and mark task as completed - here or in task class
 }
 
