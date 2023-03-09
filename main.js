@@ -1,9 +1,11 @@
 import {Tasks_store} from "./tasks_store.js";
 import {Render} from "./render.js";
+import {Task} from "./task.js";
+
 let incomplete_tasks_holder, completed_tasks_holder
 let tasks_container = document.getElementById("tasks");
 const tasks_store = new Tasks_store();
-const render = new Render();
+let render;
 
 (function init() {
   const addTaskField = document.createElement("input");
@@ -33,6 +35,7 @@ const render = new Render();
   tasks_container.appendChild(completed_tasks_holder)
 
   addButton.addEventListener("click", addTask);
+  render = new Render(incomplete_tasks_holder, completed_tasks_holder, tasks_store);
 })();
 
 function addTask() {
@@ -40,19 +43,21 @@ function addTask() {
   let add_task_field = document.getElementById("add_task_field")
   let task_text = add_task_field.value.trim()
   if (task_text.length > 0) {
-    tasks_store.add_task({
-      id: id,
-      text: task_text,
-      is_completed: false
-    })
+    tasks_store.add_task(new Task(
+      id,
+      task_text,
+      false
+    ))
   }
   add_task_field.value = "";
   render.delete_all_todo_tasks_from_the_DOM()
-  render.render_todo_tasks(tasks_store.get_todo_tasks())
+  render.render_todo_tasks(tasks_store)
 }
 
-let editTask = function () {
+export function editTask() {
+  // todo: update edited task in tasks store!
   const listItem = this.parentNode;
+  const id = listItem.attributes.id.value
   const editInput = listItem.querySelector('input[type=text]');
   const label = listItem.querySelector("label");
   const editButton = listItem.querySelector("[class=edit]");
@@ -67,25 +72,46 @@ let editTask = function () {
   listItem.classList.toggle("editMode");
 }
 
-let deleteTask = function () {
+export function deleteTask() {
   let listItem = this.parentNode;
   let id = listItem.attributes.id.value
   tasks_store.delete_task(id)
   render.rerender_all_tasks_in_DOM()
 }
 
-for (let i = 0; i < incomplete_tasks_holder.children.length; i++) {
-  console.log('WOW HERE 1')
-  render.bind_task_events(incomplete_tasks_holder.children[i], render.mark_task_completed(incomplete_tasks_holder, completed_tasks_holder, tasks_store));
-}
-
-for (let i = 0; i < completed_tasks_holder.children.length; i++) {
-  console.log('WOW HERE 2')
-  render.bind_task_events(completed_tasks_holder.children[i], render.mark_task_incomplete(incomplete_tasks_holder, completed_tasks_holder, tasks_store));
-}
+// for (let i = 0; i < incomplete_tasks_holder.children.length; i++) {
+//   console.log('WOW HERE 1')
+//   render.bind_task_events(incomplete_tasks_holder.children[i], render.mark_task_completed(tasks_store));
+// }
+//
+// for (let i = 0; i < completed_tasks_holder.children.length; i++) {
+//   console.log('WOW HERE 2')
+//   render.bind_task_events(completed_tasks_holder.children[i], render.mark_task_incomplete(tasks_store));
+// }
 
 function generate_id(length = 6) {
   return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
+export function mark_task_completed() {
+  let listItem = this.parentNode;
+  let id = listItem.attributes.id.value
+
+  tasks_store.get_todo_tasks().forEach(task => {
+    if (task.id === id)
+      task.complete();
+  })
+  render.rerender_all_tasks_in_DOM()
+}
+
+export function mark_task_incomplete() {
+  let listItem = this.parentNode;
+  let id = listItem.attributes.id.value
+
+  tasks_store.get_completed_tasks().forEach(task => {
+    if (task.id === id)
+      task.incomplete();
+  })
+  render.rerender_all_tasks_in_DOM()
+}
 

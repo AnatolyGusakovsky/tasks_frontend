@@ -1,11 +1,11 @@
 class Event_emitter {
   constructor() {
-/*    events: {
-      eventName1: [callback1, callback2, ..., callbackN],
-      eventName2: [callback1, callback2, ..., callbackN],
-    ...,
-      eventNameM: [callback1, callback2, ..., callbackN],
-    };*/
+    /*    events: {
+          eventName1: [callback1, callback2, ..., callbackN],
+          eventName2: [callback1, callback2, ..., callbackN],
+        ...,
+          eventNameM: [callback1, callback2, ..., callbackN],
+        };*/
     this.events = {};
   }
 
