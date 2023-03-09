@@ -35,13 +35,11 @@ export class Tasks_store extends Task {
 
   delete_task(id) {
     let index;
-    this.get_todo_tasks().forEach((el, i) => {
+    this.get_all_tasks().forEach((el, i) => {
       if (el.id === id)
         index = i;
     })
     Tasks_store.store.splice(index, 1)
   }
-
-  // todo: add edit_task and mark task as completed - here or in task class
 }
 
