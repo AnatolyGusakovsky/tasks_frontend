@@ -35,11 +35,18 @@ export class Tasks_store extends Task {
 
   delete_task(id) {
     let index;
-    this.get_all_tasks().forEach((el, i) => {
-      if (el.id === id)
+    this.get_all_tasks().forEach((task, i) => {
+      if (task.id === id)
         index = i;
     })
     Tasks_store.store.splice(index, 1)
+  }
+
+  get_task(id) {
+    for(let i =0; i< this.get_all_tasks().length; i++){
+      if(this.get_all_tasks()[i].id === id)
+        return this.get_all_tasks()[i]
+    }
   }
 }
 
