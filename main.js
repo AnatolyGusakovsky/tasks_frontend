@@ -79,16 +79,6 @@ export function deleteTask() {
   render.rerender_all_tasks_in_DOM()
 }
 
-// for (let i = 0; i < incomplete_tasks_holder.children.length; i++) {
-//   console.log('WOW HERE 1')
-//   render.bind_task_events(incomplete_tasks_holder.children[i], render.mark_task_completed(tasks_store));
-// }
-//
-// for (let i = 0; i < completed_tasks_holder.children.length; i++) {
-//   console.log('WOW HERE 2')
-//   render.bind_task_events(completed_tasks_holder.children[i], render.mark_task_incomplete(tasks_store));
-// }
-
 function generate_id(length = 6) {
   return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
