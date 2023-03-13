@@ -68,8 +68,10 @@ export function editTask() {
   } else {
     editButton.innerText = 'Save'
     editInput.value = label.innerText;
+    tasks_store.get_task(id).edit_text(label.innerText)
   }
   listItem.classList.toggle("editMode");
+  render.render_todo_tasks()
 }
 
 export function deleteTask() {

@@ -20,5 +20,4 @@ export class Task {
   edit_text(new_text){
     this.text = new_text;
   }
-
 }
