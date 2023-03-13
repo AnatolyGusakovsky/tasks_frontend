@@ -43,6 +43,7 @@ function addTask() {
   let add_task_field = document.getElementById("add_task_field")
   let task_text = add_task_field.value.trim()
   if (task_text.length > 0) {
+    //todo: task don't adding here, debug
     tasks_store.add_task(new Task(
       id,
       task_text,
@@ -52,6 +53,8 @@ function addTask() {
   add_task_field.value = "";
   render.delete_all_todo_tasks_from_the_DOM()
   render.render_todo_tasks(tasks_store)
+  console.log('task_store addTask()')
+  console.log(tasks_store)
 }
 
 export function editTask() {
@@ -65,13 +68,17 @@ export function editTask() {
   if (editMode) {
     editButton.innerText = 'Edit'
     label.innerText = editInput.value;
+    tasks_store.get_task(id).edit_text(label.innerText)
   } else {
     editButton.innerText = 'Save'
     editInput.value = label.innerText;
-    tasks_store.get_task(id).edit_text(label.innerText)
+
   }
   listItem.classList.toggle("editMode");
-  render.render_todo_tasks()
+  console.log('task_store')
+  console.log(tasks_store)
+  // render.delete_all_todo_tasks_from_the_DOM()
+  // render.render_todo_tasks()
 }
 
 export function deleteTask() {

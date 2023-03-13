@@ -19,5 +19,6 @@ export class Task {
 
   edit_text(new_text){
     this.text = new_text;
+    console.log('editing task text. new text: ' + new_text)
   }
 }
