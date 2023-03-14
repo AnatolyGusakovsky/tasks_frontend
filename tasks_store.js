@@ -43,9 +43,14 @@ export class Tasks_store extends Task {
   }
 
   get_task(id) {
-    for(let i =0; i< this.get_all_tasks().length; i++){
-      if(this.get_all_tasks()[i].id === id)
+    if (this.get_all_tasks().length > 0){
+    for (let i = 0; i < this.get_all_tasks().length; i++) {
+      if (this.get_all_tasks()[i].id === id)
         return this.get_all_tasks()[i]
+    }
+  }
+    else {
+      throw new Error('Error in get_task function! tasks store is empty')
     }
   }
 }
