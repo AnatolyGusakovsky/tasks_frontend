@@ -53,8 +53,6 @@ function addTask() {
   add_task_field.value = "";
   render.delete_all_todo_tasks_from_the_DOM()
   render.render_todo_tasks(tasks_store)
-  console.log('task_store addTask()')
-  console.log(tasks_store)
 }
 
 export function editTask() {
@@ -75,8 +73,7 @@ export function editTask() {
 
   }
   listItem.classList.toggle("editMode");
-  console.log('task_store')
-  console.log(tasks_store)
+  // todo: figure out why code below doesn't work. with this code commented everything works as expected
   // render.delete_all_todo_tasks_from_the_DOM()
   // render.render_todo_tasks()
 }
