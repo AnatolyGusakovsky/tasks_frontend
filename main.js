@@ -40,10 +40,9 @@ let render;
 
 function addTask() {
   const id = generate_id()
-  let add_task_field = document.getElementById("add_task_field")
-  let task_text = add_task_field.value.trim()
+  const add_task_field = document.getElementById("add_task_field")
+  const task_text = add_task_field.value.trim()
   if (task_text.length > 0) {
-    //todo: task don't adding here, debug
     tasks_store.add_task(new Task(
       id,
       task_text,
@@ -56,7 +55,6 @@ function addTask() {
 }
 
 export function editTask() {
-  // todo: update edited task in tasks store!
   const listItem = this.parentNode;
   const id = listItem.attributes.id.value
   const editInput = listItem.querySelector('input[type=text]');
@@ -73,14 +71,11 @@ export function editTask() {
 
   }
   listItem.classList.toggle("editMode");
-  // todo: figure out why code below doesn't work. with this code commented everything works as expected
-  // render.delete_all_todo_tasks_from_the_DOM()
-  // render.render_todo_tasks()
 }
 
 export function deleteTask() {
-  let listItem = this.parentNode;
-  let id = listItem.attributes.id.value
+  const listItem = this.parentNode;
+  const id = listItem.attributes.id.value
   tasks_store.delete_task(id)
   render.rerender_all_tasks_in_DOM()
 }
@@ -90,8 +85,8 @@ function generate_id(length = 6) {
 }
 
 export function mark_task_completed() {
-  let listItem = this.parentNode;
-  let id = listItem.attributes.id.value
+  const listItem = this.parentNode;
+  const id = listItem.attributes.id.value
 
   tasks_store.get_todo_tasks().forEach(task => {
     if (task.id === id)
@@ -101,8 +96,8 @@ export function mark_task_completed() {
 }
 
 export function mark_task_incomplete() {
-  let listItem = this.parentNode;
-  let id = listItem.attributes.id.value
+  const listItem = this.parentNode;
+  const id = listItem.attributes.id.value
 
   tasks_store.get_completed_tasks().forEach(task => {
     if (task.id === id)

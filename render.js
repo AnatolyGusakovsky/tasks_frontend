@@ -51,10 +51,10 @@ export class Render {
 
   render_completed_tasks() {
     this.tasks_store.get_completed_tasks().forEach(task => {
-      let listItem = document.createElement("li");
-      let label = document.createElement("label");
-      let deleteButton = document.createElement("button");
-      let checkBox = document.createElement("input");
+      const listItem = document.createElement("li");
+      const label = document.createElement("label");
+      const deleteButton = document.createElement("button");
+      const checkBox = document.createElement("input");
 
       label.innerText = task.text;
       listItem.id = task.id
@@ -85,21 +85,4 @@ export class Render {
       completed_tasks.removeChild(completed_tasks.firstChild)
     }
   }
-
-  // bind_task_events(taskListItem, checkBoxEventHandler, completed = false) {
-  //   // todo: this potentially can be moved to render methods
-  //   if (completed) {
-  //     // let deleteButton = taskListItem.querySelector("button.delete");
-  //     // let checkBox = taskListItem.querySelector("input[type=checkbox]");
-  //     // deleteButton.onclick = deleteTask;
-  //     // checkBox.onchange = checkBoxEventHandler;
-  //   } else {
-  //     // let editButton = taskListItem.querySelector("button.edit");
-  //     // let deleteButton = taskListItem.querySelector("button.delete");
-  //     // let checkBox = taskListItem.querySelector("input[type=checkbox]");
-  //     // editButton.onclick = editTask;
-  //     // deleteButton.onclick = deleteTask;
-  //     // checkBox.onchange = checkBoxEventHandler;
-  //   }
-  // }
 }
