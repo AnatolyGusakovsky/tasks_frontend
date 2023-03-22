@@ -1,4 +1,4 @@
-export class Task {
+class Task {
   id;
   text;
   is_completed;
@@ -9,15 +9,17 @@ export class Task {
     this.is_completed = is_completed;
   }
 
-  complete(){
+  complete() {
     this.is_completed = true;
   }
 
-  incomplete(){
+  incomplete() {
     this.is_completed = false;
   }
 
-  edit_text(new_text){
+  edit_text(new_text) {
     this.text = new_text;
   }
 }
+
+module.exports = Task
