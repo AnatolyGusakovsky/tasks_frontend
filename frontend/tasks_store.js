@@ -1,6 +1,6 @@
-import {Task} from "./task.js";
+const Task = require("./task");
 
-export class Tasks_store extends Task {
+class Tasks_store extends Task {
   static store = [];
 
   constructor() {
@@ -55,3 +55,4 @@ export class Tasks_store extends Task {
   }
 }
 
+module.exports = Tasks_store
