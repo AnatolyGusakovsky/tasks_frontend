@@ -34,12 +34,16 @@ class Tasks_store extends Task {
   }
 
   delete_task(id) {
-    let index;
+    let success = false
     this.get_all_tasks().forEach((task, i) => {
-      if (task.id === id)
-        index = i;
+      if (task.id === id){
+        Tasks_store.store.splice(i, 1)
+        success = true;
+      }
     })
-    Tasks_store.store.splice(index, 1)
+    if(!success)
+      return 'Error while deleting task. Task with provided id wasn\'t found in the task store'
+    return `Task with id ${id} successfully deleted`
   }
 
   get_task(id) {
