@@ -30,12 +30,11 @@ const server = http.createServer(async function (req, res) {
   }
 
     // DELETE /api/todos/:id
-  //todo: debug this endpoint
   else if (req.url.match(/\/api\/todos\/(.{6})/) && req.method === "DELETE") {
     try {
       const id = req.url.split("/")[3];
       const status = task_store.delete_task(id)
-      if (status.contains('Error'))
+      if (status.includes('Error'))
         throw new Error(status)
       res.writeHead(200, {"Content-Type": "application/json"});
       res.end(JSON.stringify(status));
