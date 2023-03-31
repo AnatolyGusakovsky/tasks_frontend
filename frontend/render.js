@@ -1,6 +1,6 @@
 import {deleteTask, editTask, mark_task_completed, mark_task_incomplete} from "./main.js";
 
-export class Render {
+class Render {
    incomplete_tasks_holder;
    completed_tasks_holder;
    tasks_store;
@@ -86,3 +86,5 @@ export class Render {
     }
   }
 }
+
+module.exports = Render

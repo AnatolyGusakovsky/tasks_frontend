@@ -1,10 +1,11 @@
-import {Tasks_store} from "./tasks_store.js";
-import {Render} from "./render.js";
-import {Task} from "./task.js";
+import Tasks_store from "./tasks_store.js";
+import Render from "./render.js";
+import Task from "./task.js";
 
 let incomplete_tasks_holder, completed_tasks_holder
 let tasks_container = document.getElementById("tasks");
 const tasks_store = new Tasks_store();
+const event_emitter = new Event_emitter()
 let render;
 
 (function init() {
