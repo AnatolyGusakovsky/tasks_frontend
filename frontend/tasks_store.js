@@ -1,4 +1,4 @@
-const Task = require("./task");
+import {Task} from "./task.js";
 
 class Tasks_store extends Task {
   static store = [];
