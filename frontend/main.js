@@ -1,6 +1,7 @@
-import Tasks_store from "./tasks_store.js";
-import Render from "./render.js";
-import Task from "./task.js";
+import {Tasks_store} from "./tasks_store.js";
+import {Render} from "./render.js";
+import {Task} from "./task.js";
+import {Event_emitter} from "./event_emitter.js";
 
 let incomplete_tasks_holder, completed_tasks_holder
 let tasks_container = document.getElementById("tasks");
@@ -8,6 +9,7 @@ const tasks_store = new Tasks_store();
 const event_emitter = new Event_emitter()
 let render;
 
+// todo: prevent saving empty task on editing
 (function init() {
   const addTaskField = document.createElement("input");
   const addButton = document.createElement("button");
@@ -35,7 +37,9 @@ let render;
   tasks_container.appendChild(completed_tasks_header)
   tasks_container.appendChild(completed_tasks_holder)
 
-  addButton.addEventListener("click", addTask);
+  addButton.addEventListener("click", /*todo: why async there is needed?*/async () => {
+    event_emitter.emit('add_button_click')
+  });
   render = new Render(incomplete_tasks_holder, completed_tasks_holder, tasks_store);
 })();
 
@@ -56,7 +60,7 @@ function addTask() {
 }
 
 export function editTask() {
-  const listItem = this.parentNode;
+  const listItem = this.parentNode; // todo: figure out why parent node is undefined if using event emitter
   const id = listItem.attributes.id.value
   const editInput = listItem.querySelector('input[type=text]');
   const label = listItem.querySelector("label");
@@ -107,3 +111,7 @@ export function mark_task_incomplete() {
   render.rerender_all_tasks_in_DOM()
 }
 
+// Event emitter subscriptions
+event_emitter.subscribe('add_button_click', async () => {
+  addTask()
+})

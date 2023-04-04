@@ -1,14 +1,33 @@
 import {deleteTask, editTask, mark_task_completed, mark_task_incomplete} from "./main.js";
+import {Event_emitter} from "./event_emitter.js";
 
 class Render {
-   incomplete_tasks_holder;
-   completed_tasks_holder;
-   tasks_store;
+  incomplete_tasks_holder;
+  completed_tasks_holder;
+  tasks_store;
+  event_emitter;
 
-  constructor(incomplete_tasks_holder, completed_tasks_holder, tasks_store){
+  constructor(incomplete_tasks_holder, completed_tasks_holder, tasks_store) {
     this.incomplete_tasks_holder = incomplete_tasks_holder;
     this.completed_tasks_holder = completed_tasks_holder;
     this.tasks_store = tasks_store;
+    this.event_emitter = new Event_emitter();
+
+    // todo: Where to store event emitter subscriptions? is it proper place?
+    // event_emitter subscriptions
+    this.event_emitter.subscribe('edit_task_btn_clicked', async () =>{
+      console.log('before calling edit task func')
+      editTask()
+    })
+    this.event_emitter.subscribe('delete_task_btn_clicked', async () =>{
+      deleteTask()
+    })
+    this.event_emitter.subscribe('checkbox_checked', async () =>{
+      mark_task_completed()
+    })
+    this.event_emitter.subscribe('checkbox_unchecked', async () =>{
+      mark_task_incomplete()
+    })
   }
 
   rerender_all_tasks_in_DOM() {
@@ -42,9 +61,15 @@ class Render {
       listItem.appendChild(editButton);
       listItem.appendChild(deleteButton);
 
-      editButton.addEventListener("click", editTask);
-      deleteButton.addEventListener("click", deleteTask);
-      checkBox.addEventListener("change", mark_task_completed);
+      editButton.addEventListener("click", async () => {
+        this.event_emitter.emit('edit_task_btn_clicked')
+      });
+      deleteButton.addEventListener("click", async () =>{
+        this.event_emitter.emit('delete_task_btn_clicked')
+      });
+      checkBox.addEventListener("change", async () => {
+        this.event_emitter.emit('mark_task_completed')
+      });
       this.incomplete_tasks_holder.appendChild(listItem);
     })
   }
@@ -67,8 +92,12 @@ class Render {
       listItem.appendChild(deleteButton);
 
       this.completed_tasks_holder.appendChild(listItem);
-      deleteButton.addEventListener("click", deleteTask)
-      checkBox.addEventListener("change", mark_task_incomplete);
+      deleteButton.addEventListener("click", async () =>{
+        this.event_emitter.emit('delete_task_btn_clicked')
+      });
+      checkBox.addEventListener("change", async () => {
+        this.event_emitter.emit('checkbox_unchecked')
+      });
     })
   }
 
@@ -87,4 +116,4 @@ class Render {
   }
 }
 
-module.exports = Render
+export {Render}

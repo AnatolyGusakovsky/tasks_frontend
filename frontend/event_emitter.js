@@ -54,3 +54,5 @@ class Event_emitter {
         event && event.forEach(callback => callback.call(null, args));
     }
 }
+
+export {Event_emitter}
