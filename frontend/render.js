@@ -15,17 +15,18 @@ class Render {
 
     // todo: Where to store event emitter subscriptions? is it proper place?
     // event_emitter subscriptions
-    this.event_emitter.subscribe('edit_task_btn_clicked', async () =>{
+    this.event_emitter.on('edit_task_btn_clicked', async (args) =>{
       console.log('before calling edit task func')
-      editTask()
+      editTask(args)
     })
-    this.event_emitter.subscribe('delete_task_btn_clicked', async () =>{
+    //todo: pass list item to all events below. Use edit_task_btn_clicked event as an example, it works properly
+    this.event_emitter.on('delete_task_btn_clicked', async () =>{
       deleteTask()
     })
-    this.event_emitter.subscribe('checkbox_checked', async () =>{
+    this.event_emitter.on('checkbox_checked', async () =>{
       mark_task_completed()
     })
-    this.event_emitter.subscribe('checkbox_unchecked', async () =>{
+    this.event_emitter.on('checkbox_unchecked', async () =>{
       mark_task_incomplete()
     })
   }
@@ -61,8 +62,9 @@ class Render {
       listItem.appendChild(editButton);
       listItem.appendChild(deleteButton);
 
-      editButton.addEventListener("click", async () => {
-        this.event_emitter.emit('edit_task_btn_clicked')
+      editButton.addEventListener("click", async (event) => {
+        const listItem = event.target.closest('li');
+        this.event_emitter.emit('edit_task_btn_clicked', listItem)
       });
       deleteButton.addEventListener("click", async () =>{
         this.event_emitter.emit('delete_task_btn_clicked')

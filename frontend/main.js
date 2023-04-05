@@ -59,8 +59,7 @@ function addTask() {
   render.render_todo_tasks(tasks_store)
 }
 
-export function editTask() {
-  const listItem = this.parentNode; // todo: figure out why parent node is undefined if using event emitter
+export function editTask(listItem) {
   const id = listItem.attributes.id.value
   const editInput = listItem.querySelector('input[type=text]');
   const label = listItem.querySelector("label");
@@ -112,6 +111,6 @@ export function mark_task_incomplete() {
 }
 
 // Event emitter subscriptions
-event_emitter.subscribe('add_button_click', async () => {
+event_emitter.on('add_button_click', async () => {
   addTask()
 })
