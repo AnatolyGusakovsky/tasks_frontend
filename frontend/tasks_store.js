@@ -59,4 +59,4 @@ class Tasks_store extends Task {
   }
 }
 
-module.exports = Tasks_store
+export {Tasks_store}
