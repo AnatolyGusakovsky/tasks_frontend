@@ -72,13 +72,11 @@ export function editTask(listItem) {
   } else {
     editButton.innerText = 'Save'
     editInput.value = label.innerText;
-
   }
   listItem.classList.toggle("editMode");
 }
 
-export function deleteTask() {
-  const listItem = this.parentNode;
+export function deleteTask(listItem) {
   const id = listItem.attributes.id.value
   tasks_store.delete_task(id)
   render.rerender_all_tasks_in_DOM()
@@ -88,8 +86,7 @@ function generate_id(length = 6) {
   return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
-export function mark_task_completed() {
-  const listItem = this.parentNode;
+export function mark_task_completed(listItem) {
   const id = listItem.attributes.id.value
 
   tasks_store.get_todo_tasks().forEach(task => {
@@ -99,8 +96,7 @@ export function mark_task_completed() {
   render.rerender_all_tasks_in_DOM()
 }
 
-export function mark_task_incomplete() {
-  const listItem = this.parentNode;
+export function mark_task_incomplete(listItem) {
   const id = listItem.attributes.id.value
 
   tasks_store.get_completed_tasks().forEach(task => {
