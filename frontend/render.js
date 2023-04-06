@@ -15,19 +15,19 @@ class Render {
 
     // todo: Where to store event emitter subscriptions? is it proper place?
     // event_emitter subscriptions
-    this.event_emitter.on('edit_task_btn_clicked', async (args) =>{
+    this.event_emitter.on('edit_task_btn_clicked', async (listItem) => {
       console.log('before calling edit task func')
-      editTask(args)
+      editTask(listItem)
     })
-    //todo: pass list item to all events below. Use edit_task_btn_clicked event as an example, it works properly
-    this.event_emitter.on('delete_task_btn_clicked', async () =>{
-      deleteTask()
+
+    this.event_emitter.on('delete_task_btn_clicked', async (listItem) => {
+      deleteTask(listItem)
     })
-    this.event_emitter.on('checkbox_checked', async () =>{
-      mark_task_completed()
+    this.event_emitter.on('checkbox_checked', async (listItem) => {
+      mark_task_completed(listItem)
     })
-    this.event_emitter.on('checkbox_unchecked', async () =>{
-      mark_task_incomplete()
+    this.event_emitter.on('checkbox_unchecked', async (listItem) => {
+      mark_task_incomplete(listItem)
     })
   }
 
@@ -66,11 +66,13 @@ class Render {
         const listItem = event.target.closest('li');
         this.event_emitter.emit('edit_task_btn_clicked', listItem)
       });
-      deleteButton.addEventListener("click", async () =>{
-        this.event_emitter.emit('delete_task_btn_clicked')
+      deleteButton.addEventListener("click", async (event) => {
+        const listItem = event.target.closest('li');
+        this.event_emitter.emit('delete_task_btn_clicked', listItem)
       });
-      checkBox.addEventListener("change", async () => {
-        this.event_emitter.emit('mark_task_completed')
+      checkBox.addEventListener("change", async (event) => {
+        const listItem = event.target.closest('li');
+        this.event_emitter.emit('checkbox_checked', listItem)
       });
       this.incomplete_tasks_holder.appendChild(listItem);
     })
@@ -94,11 +96,13 @@ class Render {
       listItem.appendChild(deleteButton);
 
       this.completed_tasks_holder.appendChild(listItem);
-      deleteButton.addEventListener("click", async () =>{
-        this.event_emitter.emit('delete_task_btn_clicked')
+      deleteButton.addEventListener("click", async (event) => {
+        const listItem = event.target.closest('li');
+        this.event_emitter.emit('delete_task_btn_clicked', listItem)
       });
-      checkBox.addEventListener("change", async () => {
-        this.event_emitter.emit('checkbox_unchecked')
+      checkBox.addEventListener("change", async (event) => {
+        const listItem = event.target.closest('li');
+        this.event_emitter.emit('checkbox_unchecked', listItem)
       });
     })
   }
