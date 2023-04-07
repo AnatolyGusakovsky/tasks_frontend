@@ -1,6 +1,6 @@
-import {Tasks_store} from "./tasks_store.js";
+import {Tasks_store} from "./tasks_store.mjs";
 import {Render} from "./render.js";
-import {Task} from "./task.js";
+import {Task} from "./task.mjs";
 import {Event_emitter} from "./event_emitter.js";
 
 let incomplete_tasks_holder, completed_tasks_holder
@@ -51,6 +51,7 @@ function addTask() {
     tasks_store.add_task(new Task(
       id,
       task_text,
+      false,
       false
     ))
   }
