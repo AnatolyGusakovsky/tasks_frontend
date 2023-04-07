@@ -1,18 +1,35 @@
-export class Api_call_wrapper {
-  async make_call(
-    url,
-    method,
-    body,
-    token
-  ) {
-    return await fetch(url, {
+class Api_call_wrapper {
+  /**
+   * Wrapper function for making API calls using the fetch API
+   * @param {string} url
+   * @param {string} method
+   * @param {Object} body
+   * @returns {Promise} A promise that resolves to the API response
+   */
+  async apiCall(url, method, body) { // tested, it works
+    const requestOptions = {
       method: method,
-      cache: 'no-cache',
       headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`
-      },
-      body: body !== undefined ? JSON.stringify(body) : null
-    })
+        'Content-Type': 'application/json'
+      }
+    };
+
+    if (body) {
+      requestOptions.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(url, requestOptions);
+
+    if (response.ok) {
+      return response.json();
+    } else if (method === 'POST' && response.status === 422) {
+      const error = await response.json();
+      return Promise.reject(error);
+    } else {
+      const error = new Error(`${response.status} (${response.statusText})`);
+      return Promise.reject(error);
+    }
   }
 }
+
+export {Api_call_wrapper}
