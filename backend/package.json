@@ -8,5 +8,9 @@
   },
   "author": "Anatoly Gusakovsky",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "koa": "^2.14.1",
+    "mongodb": "^5.2.0"
+  }
 }
