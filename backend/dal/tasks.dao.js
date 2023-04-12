@@ -1,6 +1,6 @@
-const tasks = import('./index').db('koa').collection('tasks');
+import { client } from './index.js';
+const tasks = client.db('koa').collection('products');
 
-const ObjectId = require('mongodb').ObjectId;
 
 const save = async ({
                       id,
@@ -43,8 +43,8 @@ const update = async ({
   return result.ops[0];
 }
 
-const remove_by_id = async id => {
+const remove_task = async id => {
   await tasks.deleteOne({id: id});
 }
 
-export {save, get_all_tasks_DB, get_task_DB, update, remove_by_id}
+export {save, get_all_tasks_DB, get_task_DB, update, remove_task}
