@@ -4,6 +4,7 @@ import bodyParser from 'koa-bodyparser';
 
 const app = new Koa();
 app.use(bodyParser());
-app.use(router.routes()).use(router.allowedMethods());
+app.use(router.routes());
+app.use(router.allowedMethods());
 app.listen(3000);
 console.log("Application is running on port 3000");

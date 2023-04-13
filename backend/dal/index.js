@@ -1,16 +1,16 @@
-import {MongoClient} from "mongodb";
+import { MongoClient } from 'mongodb';
 
 const client = new MongoClient('mongodb://localhost:27017', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
+});
 
-client.connect(error => {
-  if (error) {
-    console.log(error)
-    process.exit(-1)
+client.connect(err => {
+  if (err) {
+    console.error(err);
+    process.exit(-1);
   }
-  console.log('Successfully connected to the MongoDB')
+  console.log("Successfully connected to MongoDB");
 })
 
 export {client}

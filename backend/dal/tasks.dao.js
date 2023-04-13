@@ -1,5 +1,5 @@
 import { client } from './index.js';
-const tasks = client.db('koa').collection('products');
+const tasks = client.db('koa').collection('tasks');
 
 
 const save = async ({
