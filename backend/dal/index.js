@@ -1,16 +1,30 @@
-import { MongoClient } from 'mongodb';
+import {MongoClient, ServerApiVersion} from 'mongodb';
 
-const client = new MongoClient('mongodb://localhost:27017', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-client.connect(err => {
-  if (err) {
-    console.error(err);
-    process.exit(-1);
+const uri = 'mongodb://0.0.0.0:27017'
+const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
   }
-  console.log("Successfully connected to MongoDB");
-})
+);
+
+async function run() {
+  try {
+    await client.connect(err => {
+      if (err) {
+        console.error(err);
+        process.exit(-1);
+      }
+    })
+    await client.db("admin").command({ping: 1});
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+run()
 
 export {client}

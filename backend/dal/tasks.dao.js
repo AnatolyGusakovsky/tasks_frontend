@@ -1,4 +1,5 @@
-import { client } from './index.js';
+import {client} from './index.js';
+
 const tasks = client.db('koa').collection('tasks');
 
 
@@ -8,24 +9,27 @@ const save = async ({
                       is_completed,
                       is_deleted
                     }) => {
-  const result = await tasks.insertOne({
+  const db_resp = await tasks.insertOne({
     id,
     text,
     is_completed,
     is_deleted
   });
-  // Returns the inserted data
-  return result.ops[0];
+  let result;
+  db_resp.acknowledged ?
+    result = `Task saved. InsertedId: ${db_resp.insertedId}`
+    : result = `Something went wrong on task saving`;
+  return result
 }
 
 const get_all_tasks_DB = async () => {
   const cursor = await tasks.find();
-  //Converts the result into an array
   return cursor.toArray();
 }
 
 const get_task_DB = async (id) => {
-  return await tasks.findOne({id: id}); // todo: here can be an issue with id, figure out how to search by id properly
+  // todo: fix success response if task is not found
+  return await tasks.findOne({id: id});
 }
 
 const update = async ({
@@ -34,17 +38,27 @@ const update = async ({
                         is_completed,
                         is_deleted
                       }) => {
-  const result = await tasks.replaceOne({id: id}, {
+  const db_resp = await tasks.replaceOne({id: id}, {
     id,
     text,
     is_completed,
     is_deleted
-  }); // todo: here can be an issue with id, figure out how to search by id properly
-  return result.ops[0];
+  });
+  let result;
+  db_resp.acknowledged ?
+    result = `Task updated successfully`
+    : result = `Something went wrong on task updating`;
+  return result
 }
 
 const remove_task = async id => {
-  await tasks.deleteOne({id: id});
+  // todo: fix success response if task is not found
+  const db_resp = await tasks.deleteOne({id: id});
+  let result;
+  db_resp.acknowledged ?
+    result = `Task deleted successfully`
+    : result = `Something went wrong on task deletion`;
+  return result
 }
 
 export {save, get_all_tasks_DB, get_task_DB, update, remove_task}
