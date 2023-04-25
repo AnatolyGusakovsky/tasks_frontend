@@ -28,8 +28,7 @@ const get_all_tasks_DB = async () => {
 }
 
 const get_task_DB = async (id) => {
-  // todo: fix success response if task is not found
-  return await tasks.findOne({id: id});
+  return await tasks.findOne({id: id}) || 'No tasks found!';
 }
 
 const update = async ({
@@ -52,8 +51,11 @@ const update = async ({
 }
 
 const remove_task = async id => {
-  // todo: fix success response if task is not found
   const db_resp = await tasks.deleteOne({id: id});
+
+  if(db_resp.deletedCount === 0)
+    return 'Task with provided id not found. Deletion failed.'
+
   let result;
   db_resp.acknowledged ?
     result = `Task deleted successfully`
