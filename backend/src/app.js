@@ -1,6 +1,6 @@
 import * as http from "http";
-import {Tasks_store} from "../frontend/tasks_store.mjs";
-import {Task} from "../frontend/task.mjs";
+import {Tasks_store} from "../../frontend/tasks_store.mjs";
+import {Task} from "../../frontend/task.mjs";
 import {get_req_data} from "./utils.js";
 
 
