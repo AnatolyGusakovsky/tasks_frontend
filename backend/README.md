@@ -1,0 +1,1 @@
+todo: declare all setup here + explain folders structure
