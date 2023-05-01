@@ -6,7 +6,7 @@ class Api_call_wrapper {
    * @param {Object} body
    * @returns {Promise} A promise that resolves to the API response
    */
-  async apiCall(url, method, body) { // tested, it works
+  async apiCall(url, method, body) {
     const requestOptions = {
       method: method,
       headers: {
