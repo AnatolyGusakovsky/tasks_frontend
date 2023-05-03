@@ -1,1 +1,3 @@
-todo: declare all setup here + explain folders structure
+Backend for tasks app
+
+MVC based.
