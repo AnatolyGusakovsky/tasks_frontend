@@ -1,5 +1,10 @@
 //todo: change .mjs extension to .js extension when imports to backend will be liquidated
 import {Task} from "./task.mjs";
+import {Api_call_wrapper} from "./api_call_wrapper.js"
+import {PORT} from "./config.js";
+
+const api_call = Api_call_wrapper.api_call;
+const tasks_uri = `http://localhost:${PORT}/tasks/`
 
 class Tasks_store extends Task {
   static store = [];
@@ -8,8 +13,9 @@ class Tasks_store extends Task {
     super();
   }
 
-  get_all_tasks() {
-    return Tasks_store.store
+  async get_all_tasks() {
+    console.log(await api_call(tasks_uri, 'GET'))
+    return await api_call(tasks_uri, 'GET')
   }
 
   get_todo_tasks() {
