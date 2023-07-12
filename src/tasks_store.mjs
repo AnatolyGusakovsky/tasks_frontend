@@ -4,7 +4,7 @@ import {Api_call_wrapper} from "./api_call_wrapper.js"
 import {PORT} from "./config.js";
 
 const api_call = Api_call_wrapper.api_call;
-const tasks_uri = `http://localhost:${PORT}/tasks/`
+const tasks_uri = `http://localhost:${PORT}/api/tasks/`
 
 class Tasks_store extends Task {
   static store = [];
