@@ -1,4 +1,4 @@
-import {deleteTask, editTask, mark_task_completed, mark_task_incomplete} from "./main.js";
+import {deleteTask, editTask, mark_task_completed, mark_task_incomplete} from "./index.js";
 import {Event_emitter} from "./event_emitter.js";
 
 class Render {

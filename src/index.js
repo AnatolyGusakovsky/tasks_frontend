@@ -1,3 +1,6 @@
+import './styles.css'
+
+
 import {Tasks_store} from "./tasks_store.mjs";
 import {Render} from "./render.js";
 import {Task} from "./task.mjs";
@@ -11,6 +14,7 @@ let render;
 
 // todo: prevent saving empty task on editing
 (function init() {
+  console.log('inside init func')
   const addTaskField = document.createElement("input");
   const addButton = document.createElement("button");
   incomplete_tasks_holder = document.createElement("ul");

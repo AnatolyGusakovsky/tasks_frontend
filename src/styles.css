@@ -3,7 +3,7 @@ body {
     color: #333;
     font-family: Lato, sans-serif;
 }
-.tasks_container {
+title {
     display: block;
     width: 400px;
     margin: 100px auto 0;
