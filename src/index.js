@@ -1,13 +1,12 @@
 import './styles.css'
 
-
 import {Tasks_store} from "./tasks_store.mjs";
 import {Render} from "./render.js";
 import {Task} from "./task.mjs";
 import {Event_emitter} from "./event_emitter.js";
 
 let incomplete_tasks_holder, completed_tasks_holder
-let tasks_container = document.getElementById("tasks");
+let tasks_container = document.getElementById("tasks_container");
 const tasks_store = new Tasks_store();
 const event_emitter = new Event_emitter()
 let render;
