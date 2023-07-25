@@ -1,8 +1,8 @@
 import './styles.css'
 
-import {Tasks_store} from "./tasks_store.mjs";
+import {Tasks_store} from "./tasks_store.js";
 import {Render} from "./render.js";
-import {Task} from "./task.mjs";
+import {Task} from "./task.js";
 import {Event_emitter} from "./event_emitter.js";
 
 let incomplete_tasks_holder, completed_tasks_holder
@@ -13,7 +13,6 @@ let render;
 
 // todo: prevent saving empty task on editing
 (function init() {
-  console.log('inside init func')
   const addTaskField = document.createElement("input");
   const addButton = document.createElement("button");
   incomplete_tasks_holder = document.createElement("ul");
@@ -90,20 +89,20 @@ function generate_id(length = 6) {
   return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
 }
 
-export function mark_task_completed(listItem) {
+export async function mark_task_completed(listItem) {
   const id = listItem.attributes.id.value
-
-  tasks_store.get_todo_tasks().forEach(task => {
+  const todo_tasks = await tasks_store.get_todo_tasks() // todo: here I need to convert json obj to task obj to perform completion
+  todo_tasks.forEach(task => {
     if (task.id === id)
       task.complete();
   })
   render.rerender_all_tasks_in_DOM()
 }
 
-export function mark_task_incomplete(listItem) {
+export async function mark_task_incomplete(listItem) {
   const id = listItem.attributes.id.value
-
-  tasks_store.get_completed_tasks().forEach(task => {
+  const completed_tasks = await tasks_store.get_completed_tasks()
+  completed_tasks.forEach(task => {
     if (task.id === id)
       task.incomplete();
   })

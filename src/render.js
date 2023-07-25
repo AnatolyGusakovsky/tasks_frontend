@@ -38,8 +38,9 @@ class Render {
     this.render_completed_tasks()
   }
 
-  render_todo_tasks() {
-    this.tasks_store.get_todo_tasks().forEach(task => {
+  async render_todo_tasks() {
+    const todo_tasks = await this.tasks_store.get_todo_tasks()
+    todo_tasks.forEach(task => {
       const listItem = document.createElement("li");
       const label = document.createElement("label");
       const editInput = document.createElement("input");
@@ -78,8 +79,9 @@ class Render {
     })
   }
 
-  render_completed_tasks() {
-    this.tasks_store.get_completed_tasks().forEach(task => {
+  async render_completed_tasks() {
+    const completed_tasks = await this.tasks_store.get_completed_tasks()
+    completed_tasks.forEach(task => {
       const listItem = document.createElement("li");
       const label = document.createElement("label");
       const deleteButton = document.createElement("button");

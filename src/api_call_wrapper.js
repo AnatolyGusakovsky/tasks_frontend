@@ -9,9 +9,9 @@ class Api_call_wrapper {
   static async api_call(url, method, body) {
     const requestOptions = {
       method: method,
-      // headers: {
-      //   'Content-Type': 'application/json'
-      // }
+      headers: {
+        'Content-Type': 'application/json'
+      }
     };
 
     if (body) {
