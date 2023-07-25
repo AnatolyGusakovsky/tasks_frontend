@@ -1,10 +1,10 @@
 //todo: change .mjs extension to .js extension when imports to backend will be liquidated
-import {Task} from "./task.mjs";
+import {Task} from "./task.js";
 import {Api_call_wrapper} from "./api_call_wrapper.js"
 import {PORT} from "./config.js";
 
 const api_call = Api_call_wrapper.api_call;
-const tasks_uri = `http://localhost:${PORT}/api/tasks/`
+const tasks_api_url = `http://localhost:${PORT}/api/tasks/`
 
 class Tasks_store extends Task {
   static store = [];
@@ -14,22 +14,25 @@ class Tasks_store extends Task {
   }
 
   async get_all_tasks() {
-    console.log(await api_call(tasks_uri, 'GET'))
-    return await api_call(tasks_uri, 'GET')
+    console.log(await api_call(tasks_api_url, 'GET'))
+    return await api_call(tasks_api_url, 'GET')
   }
 
-  get_todo_tasks() {
+ async get_todo_tasks() {
     let todo_tasks = [];
-    Tasks_store.store.forEach(task => {
+
+    const all_tasks = await this.get_all_tasks()
+   all_tasks.forEach(task => {
       if (task.is_completed === false && task.is_deleted === false)
         todo_tasks.push(task)
     })
     return todo_tasks;
   }
 
-  get_completed_tasks() {
+  async get_completed_tasks() {
     let completed_tasks = [];
-    Tasks_store.store.forEach(task => {
+    const all_tasks = await this.get_all_tasks()
+    all_tasks.forEach(task => {
       if (task.is_completed !== false && task.is_deleted === false)
         completed_tasks.push(task)
     })
@@ -37,7 +40,7 @@ class Tasks_store extends Task {
   }
 
   add_task(task) {
-    Tasks_store.store.push(task)
+    api_call(tasks_api_url,'POST', task )
   }
 
   delete_task(id) {
