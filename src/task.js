@@ -1,4 +1,3 @@
-//todo: change .mjs extension to .js extension when imports to backend will be liquidated
 class Task {
   id;
   text;
