@@ -1,5 +1,6 @@
 import {deleteTask, editTask, mark_task_completed, mark_task_incomplete} from "./index.js";
 import {Event_emitter} from "./event_emitter.js";
+import {Tasks_store} from "./tasks_store.js";
 
 class Render {
   incomplete_tasks_holder;
@@ -31,16 +32,16 @@ class Render {
     })
   }
 
-  rerender_all_tasks_in_DOM() {
+  async rerender_all_tasks_in_DOM() {
     this.delete_all_todo_tasks_from_the_DOM()
-    this.render_todo_tasks()
     this.delete_all_completed_tasks_from_the_DOM()
-    this.render_completed_tasks()
+    Tasks_store.store = await this.tasks_store.get_all_tasks();
+     this.render_todo_tasks()
+     this.render_completed_tasks()
   }
 
-  async render_todo_tasks() {
-    const todo_tasks = await this.tasks_store.get_todo_tasks()
-    todo_tasks.forEach(task => {
+   render_todo_tasks() {
+    this.tasks_store.get_todo_tasks().forEach(task => {
       const listItem = document.createElement("li");
       const label = document.createElement("label");
       const editInput = document.createElement("input");
@@ -79,9 +80,8 @@ class Render {
     })
   }
 
-  async render_completed_tasks() {
-    const completed_tasks = await this.tasks_store.get_completed_tasks()
-    completed_tasks.forEach(task => {
+   render_completed_tasks() {
+    this.tasks_store.get_completed_tasks().forEach(task => {
       const listItem = document.createElement("li");
       const label = document.createElement("label");
       const deleteButton = document.createElement("button");

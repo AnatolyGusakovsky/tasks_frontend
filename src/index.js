@@ -12,7 +12,7 @@ const event_emitter = new Event_emitter()
 let render;
 
 // todo: prevent saving empty task on editing
-(function init() {
+(async function init() {
   const addTaskField = document.createElement("input");
   const addButton = document.createElement("button");
   incomplete_tasks_holder = document.createElement("ul");
@@ -43,9 +43,11 @@ let render;
     event_emitter.emit('add_button_click')
   });
   render = new Render(incomplete_tasks_holder, completed_tasks_holder, tasks_store);
+  await render.rerender_all_tasks_in_DOM()
 })();
 
 function addTask() {
+  //todo: 1. send to backend, check here what it gets and only if responce is success, add it to local store and render.
   const id = generate_id()
   const add_task_field = document.getElementById("add_task_field")
   const task_text = add_task_field.value.trim()
@@ -59,7 +61,7 @@ function addTask() {
   }
   add_task_field.value = "";
   render.delete_all_todo_tasks_from_the_DOM()
-  render.render_todo_tasks(tasks_store)
+  render.render_todo_tasks()
 }
 
 export function editTask(listItem) {
@@ -71,7 +73,9 @@ export function editTask(listItem) {
   if (editMode) {
     editButton.innerText = 'Edit'
     label.innerText = editInput.value;
-    tasks_store.get_task(id).edit_text(label.innerText)
+    tasks_store.get_task(id)
+    // tasks_store.get_task(id).edit_text(label.innerText)
+    // 1 get task from db 2 edit text 3 send task back (update) 4 rerender all tasks
   } else {
     editButton.innerText = 'Save'
     editInput.value = label.innerText;
@@ -79,10 +83,10 @@ export function editTask(listItem) {
   listItem.classList.toggle("editMode");
 }
 
-export function deleteTask(listItem) {
+export async function deleteTask(listItem) {
   const id = listItem.attributes.id.value
   tasks_store.delete_task(id)
-  render.rerender_all_tasks_in_DOM()
+  await render.rerender_all_tasks_in_DOM()
 }
 
 function generate_id(length = 6) {
@@ -91,22 +95,22 @@ function generate_id(length = 6) {
 
 export async function mark_task_completed(listItem) {
   const id = listItem.attributes.id.value
-  const todo_tasks = await tasks_store.get_todo_tasks() // todo: here I need to convert json obj to task obj to perform completion
+  const todo_tasks =  tasks_store.get_todo_tasks() // todo: here I need to convert json obj to task obj to perform completion
   todo_tasks.forEach(task => {
     if (task.id === id)
       task.complete();
   })
-  render.rerender_all_tasks_in_DOM()
+  await render.rerender_all_tasks_in_DOM()
 }
 
 export async function mark_task_incomplete(listItem) {
   const id = listItem.attributes.id.value
-  const completed_tasks = await tasks_store.get_completed_tasks()
+  const completed_tasks =  tasks_store.get_completed_tasks()
   completed_tasks.forEach(task => {
     if (task.id === id)
       task.incomplete();
   })
-  render.rerender_all_tasks_in_DOM()
+  await render.rerender_all_tasks_in_DOM()
 }
 
 // Event emitter subscriptions

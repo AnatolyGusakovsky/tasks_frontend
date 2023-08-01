@@ -1,4 +1,3 @@
-//todo: change .mjs extension to .js extension when imports to backend will be liquidated
 import {Task} from "./task.js";
 import {Api_call_wrapper} from "./api_call_wrapper.js"
 import {PORT} from "./config.js";
@@ -14,25 +13,21 @@ class Tasks_store extends Task {
   }
 
   async get_all_tasks() {
-    console.log(await api_call(tasks_api_url, 'GET'))
     return await api_call(tasks_api_url, 'GET')
   }
 
- async get_todo_tasks() {
+   get_todo_tasks() {
     let todo_tasks = [];
-
-    const all_tasks = await this.get_all_tasks()
-   all_tasks.forEach(task => {
+    Tasks_store.store.forEach(task => {
       if (task.is_completed === false && task.is_deleted === false)
         todo_tasks.push(task)
     })
     return todo_tasks;
   }
 
-  async get_completed_tasks() {
+  get_completed_tasks() {
     let completed_tasks = [];
-    const all_tasks = await this.get_all_tasks()
-    all_tasks.forEach(task => {
+    Tasks_store.store.forEach(task => {
       if (task.is_completed !== false && task.is_deleted === false)
         completed_tasks.push(task)
     })
@@ -40,7 +35,7 @@ class Tasks_store extends Task {
   }
 
   add_task(task) {
-    api_call(tasks_api_url,'POST', task )
+    api_call(tasks_api_url, 'POST', task)
   }
 
   delete_task(id) {
