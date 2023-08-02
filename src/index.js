@@ -46,13 +46,13 @@ let render;
   await render.rerender_all_tasks_in_DOM()
 })();
 
-function addTask() {
+async function addTask() {
   //todo: 1. send to backend, check here what it gets and only if responce is success, add it to local store and render.
   const id = generate_id()
   const add_task_field = document.getElementById("add_task_field")
   const task_text = add_task_field.value.trim()
   if (task_text.length > 0) {
-    tasks_store.add_task(new Task(
+    await tasks_store.add_task(new Task(
       id,
       task_text,
       false,
@@ -61,7 +61,7 @@ function addTask() {
   }
   add_task_field.value = "";
   render.delete_all_todo_tasks_from_the_DOM()
-  render.render_todo_tasks()
+  await render.render_todo_tasks()
 }
 
 export function editTask(listItem) {
