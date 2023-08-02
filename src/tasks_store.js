@@ -6,39 +6,52 @@ const api_call = Api_call_wrapper.api_call;
 const tasks_api_url = `http://localhost:${PORT}/api/tasks/`
 
 class Tasks_store extends Task {
-  static store = [];
+  static store = {tasks: [], inited: false};
 
   constructor() {
     super();
   }
 
-  async get_all_tasks() {
-    return await api_call(tasks_api_url, 'GET')
+  async init_store(){
+    Tasks_store.store.tasks = await api_call(tasks_api_url, 'GET')
+    Tasks_store.store.inited = true
   }
 
-   get_todo_tasks() {
+  async get_all_tasks() {
+    if (!Tasks_store.store.inited) {
+      console.log("Local tasks store initialization")
+      await this.init_store();
+    }
+    return Tasks_store.store.tasks;
+  }
+
+  async get_todo_tasks() {
     let todo_tasks = [];
-    Tasks_store.store.forEach(task => {
+    const all_tasks = await this.get_all_tasks()
+    all_tasks.forEach(task => {
       if (task.is_completed === false && task.is_deleted === false)
         todo_tasks.push(task)
     })
     return todo_tasks;
   }
 
-  get_completed_tasks() {
+  async get_completed_tasks() {
     let completed_tasks = [];
-    Tasks_store.store.forEach(task => {
+    const all_tasks = await this.get_all_tasks()
+    all_tasks.forEach(task => {
       if (task.is_completed !== false && task.is_deleted === false)
         completed_tasks.push(task)
     })
     return completed_tasks;
   }
 
-  add_task(task) {
-    api_call(tasks_api_url, 'POST', task)
+  async add_task(task) {
+    const added_task = await api_call(tasks_api_url, 'POST', task)
+    Tasks_store.store.tasks.push(added_task)
   }
 
   delete_task(id) {
+    // todo: implement the same logic as in add_task
     let success = false
     this.get_all_tasks().forEach((task, i) => {
       if (task.id === id) {
