@@ -18,17 +18,17 @@ class Render {
     // event_emitter subscriptions
     this.event_emitter.on('edit_task_btn_clicked', async (listItem) => {
       console.log('before calling edit task func')
-      editTask(listItem)
+      await editTask(listItem)
     })
 
     this.event_emitter.on('delete_task_btn_clicked', async (listItem) => {
-      deleteTask(listItem)
+      await deleteTask(listItem)
     })
     this.event_emitter.on('checkbox_checked', async (listItem) => {
-      mark_task_completed(listItem)
+      await mark_task_completed(listItem)
     })
     this.event_emitter.on('checkbox_unchecked', async (listItem) => {
-      mark_task_incomplete(listItem)
+      await mark_task_incomplete(listItem)
     })
   }
 

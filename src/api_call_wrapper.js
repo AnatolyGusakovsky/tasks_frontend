@@ -6,7 +6,7 @@ class Api_call_wrapper {
    * @param {Object} body
    * @returns {Promise} A promise that resolves to the API response
    */
-  static async api_call(url, method, body) {
+  static async api_call(url, method, body = null) {
     const requestOptions = {
       method: method,
       headers: {
@@ -21,7 +21,7 @@ class Api_call_wrapper {
     const response = await fetch(url, requestOptions);
 
     if (response.ok) {
-      return response.json();
+      return response;
     } else if (method === 'POST' && response.status === 422) {
       const error = await response.json();
       return Promise.reject(error);
