@@ -47,16 +47,17 @@ let render;
 })();
 
 async function addTask() {
-  //todo: 1. send to backend, check here what it gets and only if responce is success, add it to local store and render.
   const id = generate_id()
   const add_task_field = document.getElementById("add_task_field")
   const task_text = add_task_field.value.trim()
   if (task_text.length > 0) {
     await tasks_store.add_task(new Task(
-      id,
-      task_text,
-      false,
-      false
+      {
+        id,
+        text: task_text,
+        is_completed: false,
+        is_deleted: false
+      }
     ))
   }
   add_task_field.value = "";
@@ -64,7 +65,7 @@ async function addTask() {
   await render.render_todo_tasks()
 }
 
-export function editTask(listItem) {
+export async function editTask(listItem) {
   const id = listItem.attributes.id.value
   const editInput = listItem.querySelector('input[type=text]');
   const label = listItem.querySelector("label");
@@ -73,7 +74,7 @@ export function editTask(listItem) {
   if (editMode) {
     editButton.innerText = 'Edit'
     label.innerText = editInput.value;
-    tasks_store.get_task(id)
+    await tasks_store.get_task(id)
     // tasks_store.get_task(id).edit_text(label.innerText)
     // 1 get task from db 2 edit text 3 send task back (update) 4 rerender all tasks
   } else {
@@ -85,7 +86,7 @@ export function editTask(listItem) {
 
 export async function deleteTask(listItem) {
   const id = listItem.attributes.id.value
-  tasks_store.delete_task(id)
+  await tasks_store.delete_task(id)
   await render.rerender_all_tasks_in_DOM()
 }
 
@@ -95,7 +96,7 @@ function generate_id(length = 6) {
 
 export async function mark_task_completed(listItem) {
   const id = listItem.attributes.id.value
-  const todo_tasks =  tasks_store.get_todo_tasks() // todo: here I need to convert json obj to task obj to perform completion
+  const todo_tasks = await tasks_store.get_todo_tasks() // todo: here I need to convert json obj to task obj to perform completion
   todo_tasks.forEach(task => {
     if (task.id === id)
       task.complete();
@@ -105,7 +106,7 @@ export async function mark_task_completed(listItem) {
 
 export async function mark_task_incomplete(listItem) {
   const id = listItem.attributes.id.value
-  const completed_tasks =  tasks_store.get_completed_tasks()
+  const completed_tasks = await tasks_store.get_completed_tasks()
   completed_tasks.forEach(task => {
     if (task.id === id)
       task.incomplete();
@@ -115,5 +116,5 @@ export async function mark_task_incomplete(listItem) {
 
 // Event emitter subscriptions
 event_emitter.on('add_button_click', async () => {
-  addTask()
+  await addTask()
 })

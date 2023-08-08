@@ -4,7 +4,7 @@ class Task {
   is_completed;
   is_deleted;
 
-  constructor(id, text, is_completed, is_deleted) {
+  constructor({ id, text, is_completed, is_deleted }) {
     this.id = id;
     this.text = text;
     this.is_completed = is_completed;
