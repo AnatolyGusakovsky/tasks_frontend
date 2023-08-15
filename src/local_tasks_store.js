@@ -1,26 +1,25 @@
 import {Task} from "./task.js";
 import {Api_call_wrapper} from "./api_call_wrapper.js"
-import {PORT} from "./config.js";
+import {api_url} from "./config.js";
 
 const api_call = Api_call_wrapper.api_call;
-const tasks_api_url = `http://localhost:${PORT}/api/tasks/`
 
-class Tasks_store {
+class Local_tasks_store {
   static store = {tasks: [], inited: false};
 
   async init_store() {
-    const tasks_resp = await api_call(tasks_api_url, 'GET')
+    const tasks_resp = await api_call(api_url, 'GET')
     const tasksData = await tasks_resp.json();
-    Tasks_store.store.tasks = tasksData.map(task => new Task(task));
-    Tasks_store.store.inited = true;
+    Local_tasks_store.store.tasks = tasksData.map(task => new Task(task));
+    Local_tasks_store.store.inited = true;
   }
 
   async get_all_tasks() {
-    if (!Tasks_store.store.inited) {
+    if (!Local_tasks_store.store.inited) {
       console.log("Local tasks store initialization")
       await this.init_store();
     }
-    return Tasks_store.store.tasks;
+    return Local_tasks_store.store.tasks;
   }
 
   async get_todo_tasks() {
@@ -44,17 +43,13 @@ class Tasks_store {
   }
 
   async add_task(task) {
-    const added_task_obj = await api_call(tasks_api_url, 'POST', task)
+    const added_task_obj = await api_call(api_url, 'POST', task)
     const added_task = await added_task_obj.json()
-    console.log('added_task')
-    console.log(added_task)
-    Tasks_store.store.tasks.push(new Task(added_task))
-    console.log('Tasks_store.store.tasks after adding')
-    console.log(Tasks_store.store.tasks)
+    Local_tasks_store.store.tasks.push(new Task(added_task))
   }
 
   async delete_task(id) {
-    const response = await api_call(tasks_api_url + id, 'DELETE')
+    const response = await api_call(api_url + id, 'DELETE')
     if (response.ok) {
       let success = false
       const all_tasks = await this.get_all_tasks()
@@ -81,4 +76,4 @@ class Tasks_store {
   }
 }
 
-export {Tasks_store}
+export {Local_tasks_store}
