@@ -1,14 +1,16 @@
 import './styles.css'
-
-import {Tasks_store} from "./tasks_store.js";
+import {Local_tasks_store} from "./local_tasks_store.js";
 import {Render} from "./render.js";
 import {Task} from "./task.js";
 import {Event_emitter} from "./event_emitter.js";
+import {Api_call_wrapper} from "./api_call_wrapper.js";
+import {api_url} from "./config.js";
 
+const tasks_store = new Local_tasks_store();
+const event_emitter = new Event_emitter()
+const api_call = Api_call_wrapper.api_call;
 let incomplete_tasks_holder, completed_tasks_holder
 let tasks_container = document.getElementById("tasks_container");
-const tasks_store = new Tasks_store();
-const event_emitter = new Event_emitter()
 let render;
 
 // todo: prevent saving empty task on editing
@@ -74,9 +76,12 @@ export async function editTask(listItem) {
   if (editMode) {
     editButton.innerText = 'Edit'
     label.innerText = editInput.value;
-    await tasks_store.get_task(id)
-    // tasks_store.get_task(id).edit_text(label.innerText)
-    // 1 get task from db 2 edit text 3 send task back (update) 4 rerender all tasks
+
+    const original_task = await tasks_store.get_task(id);
+    const task_copy = new Task({...original_task});
+    task_copy.edit_text(editInput.value)
+    const resp = await api_call(api_url + id, 'PUT', task_copy)
+    resp.ok ? original_task.edit_text(editInput.value) : console.log('error while editing text of task ' + id)
   } else {
     editButton.innerText = 'Save'
     editInput.value = label.innerText;
@@ -90,27 +95,23 @@ export async function deleteTask(listItem) {
   await render.rerender_all_tasks_in_DOM()
 }
 
-function generate_id(length = 6) {
-  return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
-}
-
 export async function mark_task_completed(listItem) {
   const id = listItem.attributes.id.value
-  const todo_tasks = await tasks_store.get_todo_tasks() // todo: here I need to convert json obj to task obj to perform completion
-  todo_tasks.forEach(task => {
-    if (task.id === id)
-      task.complete();
-  })
+  const original_task = await tasks_store.get_task(id);
+  const task_copy = new Task({...original_task});
+  task_copy.complete()
+  const resp = await api_call(api_url + id, 'PUT', task_copy)
+  resp.ok ? original_task.complete() : console.log('error while completing task')
   await render.rerender_all_tasks_in_DOM()
 }
 
 export async function mark_task_incomplete(listItem) {
   const id = listItem.attributes.id.value
-  const completed_tasks = await tasks_store.get_completed_tasks()
-  completed_tasks.forEach(task => {
-    if (task.id === id)
-      task.incomplete();
-  })
+  const original_task = await tasks_store.get_task(id);
+  const task_copy = new Task({...original_task});
+  task_copy.incomplete();
+  const resp = await api_call(api_url + id, 'PUT', task_copy)
+  resp.ok ? original_task.incomplete() : console.log('error while incompleting task')
   await render.rerender_all_tasks_in_DOM()
 }
 
@@ -118,3 +119,7 @@ export async function mark_task_incomplete(listItem) {
 event_emitter.on('add_button_click', async () => {
   await addTask()
 })
+
+function generate_id(length = 6) {
+  return 'id_' + Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
+}
