@@ -13,7 +13,6 @@ let incomplete_tasks_holder, completed_tasks_holder
 let tasks_container = document.getElementById("tasks_container");
 let render;
 
-// todo: prevent saving empty task on editing
 (async function init() {
   const addTaskField = document.createElement("input");
   const addButton = document.createElement("button");
@@ -41,7 +40,7 @@ let render;
   tasks_container.appendChild(completed_tasks_header)
   tasks_container.appendChild(completed_tasks_holder)
 
-  addButton.addEventListener("click", /*todo: why async there is needed?*/async () => {
+  addButton.addEventListener("click",async () => {
     event_emitter.emit('add_button_click')
   });
   render = new Render(incomplete_tasks_holder, completed_tasks_holder, tasks_store);
@@ -74,6 +73,10 @@ export async function editTask(listItem) {
   const editButton = listItem.querySelector("[class=edit]");
   const editMode = listItem.classList.contains("editMode");
   if (editMode) {
+    if (editInput.value.trim() === "") {
+      alert("Task cannot be empty!");
+      return; // Exit the function without toggling the edit mode or saving the task
+    }
     editButton.innerText = 'Edit'
     label.innerText = editInput.value;
 
@@ -115,7 +118,6 @@ export async function mark_task_incomplete(listItem) {
   await render.rerender_all_tasks_in_DOM()
 }
 
-// Event emitter subscriptions
 event_emitter.on('add_button_click', async () => {
   await addTask()
 })

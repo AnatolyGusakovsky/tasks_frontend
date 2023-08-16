@@ -16,7 +16,6 @@ class Local_tasks_store {
 
   async get_all_tasks() {
     if (!Local_tasks_store.store.inited) {
-      console.log("Local tasks store initialization")
       await this.init_store();
     }
     return Local_tasks_store.store.tasks;
