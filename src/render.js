@@ -13,8 +13,6 @@ class Render {
     this.tasks_store = tasks_store;
     this.event_emitter = new Event_emitter();
 
-    // todo: Where to store event emitter subscriptions? is it proper place?
-    // event_emitter subscriptions
     this.event_emitter.on('edit_task_btn_clicked', async (listItem) => {
       console.log('before calling edit task func')
       await editTask(listItem)
@@ -34,13 +32,13 @@ class Render {
   async rerender_all_tasks_in_DOM() {
     this.delete_all_todo_tasks_from_the_DOM()
     this.delete_all_completed_tasks_from_the_DOM()
-     this.render_todo_tasks()
-     this.render_completed_tasks()
+    this.render_todo_tasks()
+    this.render_completed_tasks()
   }
 
-   async render_todo_tasks() {
+  async render_todo_tasks() {
     const todo_tasks = await this.tasks_store.get_todo_tasks()
-     todo_tasks.forEach(task => {
+    todo_tasks.forEach(task => {
       const listItem = document.createElement("li");
       const label = document.createElement("label");
       const editInput = document.createElement("input");
@@ -79,9 +77,9 @@ class Render {
     })
   }
 
-   async render_completed_tasks() {
-     const completed_tasks = await this.tasks_store.get_completed_tasks()
-     completed_tasks.forEach(task => {
+  async render_completed_tasks() {
+    const completed_tasks = await this.tasks_store.get_completed_tasks()
+    completed_tasks.forEach(task => {
       const listItem = document.createElement("li");
       const label = document.createElement("label");
       const deleteButton = document.createElement("button");
