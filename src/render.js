@@ -1,4 +1,4 @@
-import {deleteTask, editTask, mark_task_completed, mark_task_incomplete} from "./index.js";
+import {deleteTask, editTaskText, mark_task_completed, mark_task_incomplete} from "./index.js";
 import {Event_emitter} from "./event_emitter.js";
 
 class Render {
@@ -15,7 +15,7 @@ class Render {
 
     this.event_emitter.on('edit_task_btn_clicked', async (listItem) => {
       console.log('before calling edit task func')
-      await editTask(listItem)
+      await editTaskText(listItem)
     })
 
     this.event_emitter.on('delete_task_btn_clicked', async (listItem) => {
