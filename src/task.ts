@@ -4,7 +4,9 @@ class Task {
   is_completed;
   is_deleted;
 
-  constructor({ id, text, is_completed, is_deleted }) {
+  constructor({ id, text, is_completed, is_deleted }:{
+    id:string, text:string, is_completed:boolean, is_deleted:boolean
+  }) {
     this.id = id;
     this.text = text;
     this.is_completed = is_completed;
@@ -19,7 +21,7 @@ class Task {
     this.is_completed = false;
   }
 
-  edit_text(new_text) {
+  edit_text(new_text: string) {
     this.text = new_text;
   }
 

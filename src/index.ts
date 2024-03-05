@@ -1,17 +1,18 @@
 import './styles.css'
-import {Local_tasks_store} from "./local_tasks_store.js";
-import {Render} from "./render.js";
-import {Task} from "./task.js";
-import {Event_emitter} from "./event_emitter.js";
-import {Api_call_wrapper} from "./api_call_wrapper.js";
-import {api_url} from "./config.js";
+import {Local_tasks_store} from "./local_tasks_store";
+import {Render} from "./render";
+import {Task} from "./task";
+import {Event_emitter} from "./event_emitter";
+import {Api_call_wrapper} from "./api_call_wrapper";
+import {api_url} from "./config";
 
 const local_tasks_store = new Local_tasks_store();
 const event_emitter = new Event_emitter()
 const api_call = Api_call_wrapper.api_call;
 let incomplete_tasks_holder, completed_tasks_holder
+// @ts-ignore
 let tasks_container = document.getElementById("tasks_container");
-let render;
+let render: Render;
 
 (async function init() {
   const addTaskField = document.createElement("input");
@@ -32,12 +33,17 @@ let render;
   completed_tasks_holder.className = 'completed_tasks_holder'
   completed_tasks_holder.id = 'completed-tasks'
   completed_tasks_holder.title = 'Completed Tasks'
-
+  // @ts-ignore
   tasks_container.appendChild(addTaskField)
+  // @ts-ignore
   tasks_container.appendChild(addButton)
+  // @ts-ignore
   tasks_container.appendChild(todo_header)
+  // @ts-ignore
   tasks_container.appendChild(incomplete_tasks_holder)
+  // @ts-ignore
   tasks_container.appendChild(completed_tasks_header)
+  // @ts-ignore
   tasks_container.appendChild(completed_tasks_holder)
 
   addButton.addEventListener("click", async () => {
@@ -50,6 +56,7 @@ let render;
 async function addTask() {
   const id = generate_id()
   const add_task_field = document.getElementById("add_task_field")
+  // @ts-ignore
   const task_text = add_task_field.value.trim()
   if (task_text.length > 0) {
     await local_tasks_store.add_task(new Task(
@@ -61,12 +68,13 @@ async function addTask() {
       }
     ))
   }
+  // @ts-ignore
   add_task_field.value = "";
   render.delete_all_todo_tasks_from_the_DOM()
   await render.render_todo_tasks()
 }
 
-export async function editTaskText(listItem) {
+export async function editTaskText(listItem:any) {
   const id = listItem.attributes.id.value
   const editInput = listItem.querySelector('input[type=text]');
   const label = listItem.querySelector("label");
@@ -81,10 +89,13 @@ export async function editTaskText(listItem) {
     label.innerText = editInput.value;
 
     const original_task = await local_tasks_store.get_task(id);
+    // @ts-ignore
     const updated_task = new Task({...original_task});
     updated_task.edit_text(editInput.value)
+    // @ts-ignore
     delete updated_task.id // removes id from payload, as it's passed in url
     const resp = await api_call(api_url + id, 'PUT', updated_task)
+    // @ts-ignore
     resp.ok ? original_task.edit_text(editInput.value) : console.log('error while editing text of task ' + id)
   } else {
     editButton.innerText = 'Save'
@@ -93,30 +104,36 @@ export async function editTaskText(listItem) {
   listItem.classList.toggle("editMode");
 }
 
-export async function deleteTask(listItem) {
+export async function deleteTask(listItem: any) {
   const id = listItem.attributes.id.value
   await local_tasks_store.delete_task(id)
   await render.rerender_all_tasks_in_DOM()
 }
 
-export async function mark_task_completed(listItem) {
+export async function mark_task_completed(listItem:any) {
   const id = listItem.attributes.id.value
   const original_task = await local_tasks_store.get_task(id);
+  // @ts-ignore
   const updated_task = new Task({...original_task});
   updated_task.complete()
+  // @ts-ignore
   delete updated_task.id // removes id from payload, as it's passed in url
   const resp = await api_call(api_url + id, 'PUT', updated_task)
+  // @ts-ignore
   resp.ok ? original_task.complete() : console.log('error while completing task')
   await render.rerender_all_tasks_in_DOM()
 }
 
-export async function mark_task_incomplete(listItem) {
+export async function mark_task_incomplete(listItem:any) {
   const id = listItem.attributes.id.value
   const original_task = await local_tasks_store.get_task(id);
+  // @ts-ignore
   const updated_task = new Task({...original_task});
   updated_task.incomplete();
+  // @ts-ignore
   delete updated_task.id // removes id from payload, as it's passed in url
   const resp = await api_call(api_url + id, 'PUT', updated_task)
+  // @ts-ignore
   resp.ok ? original_task.incomplete() : console.log('error while incompleting task')
   await render.rerender_all_tasks_in_DOM()
 }
