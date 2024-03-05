@@ -1,4 +1,6 @@
 class Event_emitter {
+     events: any
+
     constructor() {
         /*
         The constructor method is used to initialize an empty object named events as an instance variable of the class.
@@ -14,18 +16,18 @@ class Event_emitter {
         this.events = {};
     }
 
-    on(eventName, callback) {
+    on(eventName:string, callback: any) {
         !this.events[eventName] && (this.events[eventName] = []);
         this.events[eventName].push(callback);
     }
 
-    unsubscribe(eventName, callback) {
-        this.events[eventName] = this.events[eventName].filter(eventCallback => callback !== eventCallback);
+    unsubscribe(eventName: string, callback: any) {
+        this.events[eventName] = this.events[eventName].filter((eventCallback: any) => callback !== eventCallback);
     }
 
-    emit(eventName, args) {
+    emit(eventName: string, args?: any) {
         const event = this.events[eventName];
-        event && event.forEach(callback => callback.call(null, args));
+        event && event.forEach((callback: { call: (arg0: null, arg1: any) => any; }) => callback.call(null, args));
     }
 }
 

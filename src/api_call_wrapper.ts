@@ -6,12 +6,13 @@ class Api_call_wrapper {
    * @param {Object} body
    * @returns {Promise} A promise that resolves to the API response
    */
-  static async api_call(url, method, body = null) {
+  static async api_call(url:string, method:string, body?:any) {
     const requestOptions = {
       method: method,
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: body
     };
 
     if (body) {
