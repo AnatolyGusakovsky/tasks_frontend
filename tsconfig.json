@@ -2,37 +2,16 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-//    "esModuleInterop": true,
-//    "forceConsistentCasingInFileNames": true,
     "strict": true,
-//    "noImplicitAny": true,
-//    "strictNullChecks": true,
-
-    "outDir": "./dist",                             // Directs output structure to './dist'
-    "moduleResolution": "node",                     // Explicitly set to 'node' for CommonJS modules
-     "lib": ["dom", "es2016"],                     // Uncomment and customize if you need specific libraries
-    "resolveJsonModule": true                       // Enable importing '.json' files directly
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "es2016"
+    ],
+    "resolveJsonModule": true
   },
   "include": [
-    "src"                                      // Include all files in 'src' directory
-  ],
-//  "exclude": [
-//    "node_modules",                                 // Exclude 'node_modules' directory
-//    "**/*.spec.ts"                                  // Exclude test files if any, adjust pattern as needed
-//  ]
+    "src"
+  ]
 }
-//{
-//  "compilerOptions": {
-//    "resolveJsonModule": true,
-//    "esModuleInterop": true,
-//    "strict": true,
-//    "target": "es6",
-//    "lib": ["ES6"],
-//    "types": [
-//      "node"
-//    ],
-//    "module": "commonjs",
-//    "moduleResolution": "node"
-//  },
-//  "include": ["src"],
-//}
