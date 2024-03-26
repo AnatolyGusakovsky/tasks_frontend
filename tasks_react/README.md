@@ -1,3 +1,38 @@
+#Monarch
+**Folders:**
+
+components: Contains reusable UI components organized by feature or functionality. Common components are stored in the "common" subfolder.
+
+containers: Holds container components responsible for fetching data and passing it down to presentational components.
+
+pages: Represents different pages/routes of the application. Each page typically corresponds to a route and may consist of one or more components.
+
+api: Houses API utility functions responsible for making HTTP requests to backend services.
+
+actions: Contains action creators responsible for triggering changes to the application state.
+
+reducers: Holds reducers responsible for managing specific slices of the application state.
+
+store: Contains the Redux store configuration.
+
+utils: Stores utility functions or helper classes used throughout the application.
+
+styles: Contains SCSS files for styling the application, including variables, mixins, and global styles.
+
+assets: Holds static assets such as images and fonts.
+(2) In the above problem let us suppose
+routes: Contains the routing configuration of the application.
+
+index.js: Entry point of the application.
+
+App.js: Main component of the application.
+
+config.js: Configuration settings for the application.
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
