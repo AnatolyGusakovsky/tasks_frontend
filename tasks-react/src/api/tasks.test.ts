@@ -1,7 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
-import {fetchTask, fetchTasks} from './tasks';
+import {fetchTask, fetchTasks, updateTask} from './tasks';
 import axiosApiInstance from './axiosInstance';
 import {Task} from "../models/Task";
+import exp from "constants";
 
 describe('fetchTasks', () => {
 
@@ -27,4 +28,35 @@ describe('fetchTasks', () => {
     const response = await fetchTasks();
     expect(response).toEqual(tasksArr);
   });
+
+
+  it('updates task successfully', async ()=>{
+    const mock = new MockAdapter(axiosApiInstance);
+    const updatedTask:Task = { id: '12345', text: "this is a text for test task", isCompleted: false, isDeleted:true };
+    mock.onPut(`/tasks/${updatedTask.id}`).reply(200, updatedTask);
+    const response = await updateTask(updatedTask)
+    expect(response).toEqual(updatedTask)
+  })
+
+  it('fails to update task with invalid data', async () => {
+    const mock = new MockAdapter(axiosApiInstance);
+    const invalidTask: any = { id: '12345', text: 123, isCompleted: 'no', isDeleted: true }; // Invalid types
+    mock.onPut(`/tasks/${invalidTask.id}`).reply(200, invalidTask);
+    await expect(updateTask(invalidTask)).rejects.toThrow();
+  });
+
+  it('handles server errors', async () => {
+    const mock = new MockAdapter(axiosApiInstance);
+    const updatedTask: Task = { id: '12345', text: "this is a text for test task", isCompleted: false, isDeleted: true };
+    mock.onPut(`/tasks/${updatedTask.id}`).networkError();
+    await expect(updateTask(updatedTask)).rejects.toThrow();
+  });
+
+  it('handles 500 internal server error', async () => {
+    const mock = new MockAdapter(axiosApiInstance);
+    const updatedTask: Task = { id: '12345', text: "this is a text for test task", isCompleted: false, isDeleted: true };
+    mock.onPut(`/tasks/${updatedTask.id}`).reply(500);
+    await expect(updateTask(updatedTask)).rejects.toThrow();
+  });
+
 });
