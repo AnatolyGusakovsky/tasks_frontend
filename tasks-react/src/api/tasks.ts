@@ -7,6 +7,7 @@ import {Task} from "../models/Task";
 import {TaskSchema} from "./schemas/task";
 import axiosApiInstance from './axiosInstance'
 import {z} from "zod";
+import {api_url} from "../../../src/config";
 
 // uses the TaskSchema for runtime validation
 export async function fetchTask(taskID:string): Promise<Task> {
@@ -19,3 +20,14 @@ export async function fetchTasks(): Promise<ReadonlyArray<Task>> {
   const response = await axiosApiInstance.get(`/tasks/`);
   return ResponseSchema.parse(response.data);
 }
+//todo: ensure backend return updated entity (not a string "success" or so!)
+export async function updateTask(updatedTask: Task): Promise<Task>{
+    // This new object will have the same values as updatedTask but is guaranteed to adhere to the types and structure defined in TaskSchema
+    const parsedTask = TaskSchema.parse(updatedTask);
+    const response = await axiosApiInstance.put(`/tasks/${parsedTask.id}`, parsedTask);
+    return response.data;
+}
+
+export function createTask(){}
+
+export function deleteTask(){}
