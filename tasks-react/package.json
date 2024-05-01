@@ -9,6 +9,8 @@
     "@types/node": "^16.18.87",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
+    "@vanilla-extract/css": "^1.15.1",
+    "@vanilla-extract/webpack-plugin": "^2.3.8",
     "axios": "1.6.0",
     "axios-mock-adapter": "^1.22.0",
     "react": "^18.2.0",
