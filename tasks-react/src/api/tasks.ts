@@ -2,18 +2,15 @@
 // Given the ease of use, and to avoid common bugs related to this binding, the arrow function syntax is used for API call methods
 // This approach aligns well with React's patterns and makes components easier to manage.
 
-import axios from 'axios';
 import {Task} from "../models/Task";
 import {TaskSchema} from "./schemas/task";
 import axiosApiInstance from './axiosInstance'
 import {z} from "zod";
-import {api_url} from "../../../src/config";
 
-// uses the TaskSchema for runtime validation
 export async function fetchTask(taskID:string): Promise<Task> {
   const response = await axiosApiInstance.get(`/task/${taskID}`);
   // Validate the response data at runtime using the Zod schema
-  return TaskSchema.parse(response.data); // task is now validated against the Task schema and is of type Task
+  return TaskSchema.parse(response.data);
 }
 export async function fetchTasks(): Promise<ReadonlyArray<Task>> {
   const ResponseSchema = z.array(TaskSchema).optional().default([])
@@ -28,6 +25,12 @@ export async function updateTask(updatedTask: Task): Promise<Task>{
     return response.data;
 }
 
-export function createTask(){}
+export async function createTask(task: Task): Promise<Task>{
+  const parsedTask = TaskSchema.parse(task);
+  const response = await axiosApiInstance.post(`/tasks/`, parsedTask);
+  return response.data;
+}
 
-export function deleteTask(){}
+export async function deleteTask(taskId: string): Promise<void>{
+ await axiosApiInstance.delete(`/tasks/${taskId}`);
+}
