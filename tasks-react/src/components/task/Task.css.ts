@@ -1,30 +1,66 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../../designTokens.css';
 
-export const styles = {
-  taskItem: style({
-    display: 'flex',
-    alignItems: 'center',
-    padding: vars.space.medium,
-    borderBottom: `1px solid ${vars.color.text}`,
-  }),
-  inputText: style({
-    flexGrow: 1,
-    marginRight: vars.space.small,
-  }),
-  button: style({
-    marginLeft: vars.space.small,
-    padding: `${vars.space.small} ${vars.space.medium}`,
-    borderRadius: vars.borderRadius,
-    background: vars.color.primary,
-    color: 'white',
-    border: 'none',
-    cursor: 'pointer',
-    ':hover': {
-      opacity: 0.8
-    }
-  }),
-  deleteButton: style({
-    background: vars.color.danger
-  })
-};
+export const taskItem = style({
+  display: 'flex',
+  alignItems: 'center',
+  padding: vars.space.medium,
+  borderBottom: `1px solid ${vars.color.text}`,
+});
+
+export const button = style({
+  marginLeft: vars.space.small,
+  padding: `${vars.space.small} ${vars.space.medium}`,
+  borderRadius: vars.borderRadius,
+  background: vars.color.primary,
+  color: 'white',
+  border: 'none',
+  cursor: 'pointer',
+  ':hover': {
+    opacity: 0.8
+  }
+});
+
+export const deleteButton = style([
+  button, // Reference 'button' directly since it's now a separate definition
+  {
+    background: vars.color.danger // Overrides the 'background' property
+  }
+]);
+
+export const inputText = style({
+  flexGrow: 1,
+  padding: '3px',
+  border: `1px solid ${vars.color.lightGrey}`, // Assuming 'lightGrey' is defined in your tokens
+  borderRadius: vars.borderRadius,
+  fontSize: '16px',
+  color: vars.color.text,
+  background: 'white',
+  outline: 'none',
+
+  // Subtle transition for border and background changes
+  transition: 'border-color 0.2s, background-color 0.2s',
+
+  // Focus state styling
+  ':focus': {
+    borderColor: vars.color.primary,
+    boxShadow: `0 0 0 2px ${vars.color.lightBlue}` // Assuming 'lightBlue' is defined
+  },
+
+  // Placeholder styling
+  '::placeholder': {
+    color: vars.color.grey
+  }
+});
+
+export const inputTextReadonly = style({
+  background: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+});
+
+export const checkbox = style({
+  margin: '0 10px',
+  position: 'relative',
+  transform: 'scale(2)'
+})

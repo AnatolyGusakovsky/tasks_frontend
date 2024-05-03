@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Task } from "../../models/Task";
 import { updateTask, deleteTask } from "../../api/tasks";
-import {styles} from './Task.css';
+import {button, checkbox, deleteButton, inputText, inputTextReadonly, taskItem} from './Task.css';
 
 type TaskProps = {
   task: Task;
@@ -51,10 +51,11 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask }) => {
   }
 
   return (
-    <li id={`id_${task.id}`} className={styles.taskItem}>
+    <li id={`id_${task.id}`} className={taskItem}>
       <input
         type="checkbox"
         checked={task.isCompleted}
+        className={checkbox}
         onChange={toggleCompletion} // Toggle completion on change
       />
       {isEditing ? (
@@ -62,15 +63,16 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask }) => {
           type="text"
           value={task.text}
           onChange={handleTextChange}
+          className={inputText}
           autoFocus  // Automatically focus the input on edit
         />
       ) : (
-        <label onDoubleClick={handleEditClick}>{task.text}</label> // Double click to edit
+        <label onDoubleClick={handleEditClick} className={inputTextReadonly}>{task.text}</label> // Double click to edit
       )}
-      <button onClick={handleEditClick} className={styles.button}>
+      <button onClick={handleEditClick} className={button}>
         {isEditing ? "Save" : "Edit"}
       </button>
-      <button onClick={handleDelete} className={styles.deleteButton}>Delete</button>
+      <button onClick={handleDelete} className={deleteButton}>Delete</button>
     </li>
   );
 };
