@@ -4,7 +4,7 @@ import './App.css';
 import {TaskComponent} from "./components/task/task";
 
 const testDataObj = {
-  id: "stringId234",
+  id: "id_425363",
   text: "Clean table!",
   isCompleted: false,
   isDeleted: false
@@ -17,7 +17,7 @@ function App() {
         <div className="TasksApp">
           <TaskComponent task={testDataObj}/>
         </div>
-        <p>
+        <p data-testid="instruction-text">
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
       </header>
