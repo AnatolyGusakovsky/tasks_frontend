@@ -5,9 +5,11 @@ import {button, checkbox, deleteButton, inputText, inputTextReadonly, taskItem} 
 
 type TaskProps = {
   task: Task;
+  onDelete: (taskId: string) => void;
+  onUpdate: (task: Task) => void;
 }
 
-export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask }) => {
+export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete, onUpdate }) => {
   const [task, setTask] = useState<Task>(initialTask);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -21,7 +23,7 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask }) => {
   }
 
   function toggleCompletion() {
-    const updatedTask = { ...task, isCompleted: !task.isCompleted };
+    const updatedTask = { ...task, is_completed: !task.is_completed };
     onTaskUpdate(updatedTask);
   }
 
@@ -37,14 +39,14 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask }) => {
   }
 
   function handleSave() {
-    onTaskUpdate(task);
+    onUpdate(task);  // Propagate the update upward
     setIsEditing(false);
   }
 
   async function handleDelete() {
     try {
       await deleteTask(task.id);
-      // Optional: Inform the parent component about the deletion or handle UI updates here
+      onDelete(task.id);  // Propagate the deletion upward
     } catch (e) {
       console.error(e);
     }
@@ -54,7 +56,7 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask }) => {
     <li id={`id_${task.id}`} className={taskItem}>
       <input
         type="checkbox"
-        checked={task.isCompleted}
+        checked={task.is_completed}
         className={checkbox}
         onChange={toggleCompletion} // Toggle completion on change
       />

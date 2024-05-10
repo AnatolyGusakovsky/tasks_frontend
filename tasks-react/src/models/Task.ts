@@ -9,6 +9,6 @@
 export type Task = Readonly<{
   id: string
   text: string
-  isCompleted: boolean
-  isDeleted: boolean
+  is_completed: boolean
+  is_deleted: boolean
 }>;

@@ -83,7 +83,7 @@ export async function editTaskText(listItem:any) {
   if (editMode) {
     if (editInput.value.trim() === "") {
       alert("Task cannot be empty!");
-      return; // Exit the function without toggling the edit mode or saving the task
+      return; // Exit the function without toggling the edit mode or saving the Task
     }
     editButton.innerText = 'Edit'
     label.innerText = editInput.value;
@@ -96,7 +96,7 @@ export async function editTaskText(listItem:any) {
     delete updated_task.id // removes id from payload, as it's passed in url
     const resp = await api_call(api_url + id, 'PUT', updated_task)
     // @ts-ignore
-    resp.ok ? original_task.edit_text(editInput.value) : console.log('error while editing text of task ' + id)
+    resp.ok ? original_task.edit_text(editInput.value) : console.log('error while editing text of Task ' + id)
   } else {
     editButton.innerText = 'Save'
     editInput.value = label.innerText;
@@ -120,7 +120,7 @@ export async function mark_task_completed(listItem:any) {
   delete updated_task.id // removes id from payload, as it's passed in url
   const resp = await api_call(api_url + id, 'PUT', updated_task)
   // @ts-ignore
-  resp.ok ? original_task.complete() : console.log('error while completing task')
+  resp.ok ? original_task.complete() : console.log('error while completing Task')
   await render.rerender_all_tasks_in_DOM()
 }
 
@@ -134,7 +134,7 @@ export async function mark_task_incomplete(listItem:any) {
   delete updated_task.id // removes id from payload, as it's passed in url
   const resp = await api_call(api_url + id, 'PUT', updated_task)
   // @ts-ignore
-  resp.ok ? original_task.incomplete() : console.log('error while incompleting task')
+  resp.ok ? original_task.incomplete() : console.log('error while incompleting Task')
   await render.rerender_all_tasks_in_DOM()
 }
 

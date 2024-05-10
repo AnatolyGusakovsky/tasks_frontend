@@ -65,7 +65,7 @@ class Local_tasks_store {
         }
       })
       if (!success)
-        console.log ('Error while deleting task. Task with provided id wasn\'t found in the local task store')
+        console.log ('Error while deleting Task. Task with provided id wasn\'t found in the local Task store')
       console.log ( `Task with id ${id} successfully marked as deleted in the local task store`)
     }
   }
