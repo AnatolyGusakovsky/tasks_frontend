@@ -15,7 +15,7 @@ class Render {
     this.event_emitter = new Event_emitter();
 
     this.event_emitter.on('edit_task_btn_clicked', async (listItem: any) => {
-      console.log('before calling edit task func')
+      console.log('before calling edit Task func')
       await editTaskText(listItem)
     })
 
