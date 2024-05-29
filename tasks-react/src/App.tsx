@@ -7,12 +7,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        Tasks App
         <div className="TasksApp">
           <TaskList/>
         </div>
-        <p data-testid="instruction-text">
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
       </header>
     </div>
   );
