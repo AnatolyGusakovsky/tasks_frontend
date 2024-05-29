@@ -2,12 +2,12 @@ import { createGlobalTheme } from '@vanilla-extract/css';
 
 export const vars = createGlobalTheme(':root', {
   space: {
-    small: '8px',
-    medium: '16px',
-    large: '32px',
+    small: '6px',
+    medium: '12px',
+    large: '24px',
   },
   color: {
-    primary: '#007bff',
+    primary: '#6c9de8',
     danger: '#dc3545',
     text: '#212529',
     lightGrey: '#e6e8ec',

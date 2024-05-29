@@ -15,7 +15,7 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
 
   async function onTaskUpdate(updatedTask: Task) {
     try {
-      await updateTask(updatedTask);
+      await updateTask(updatedTask); //todo: since updateTask is also being called in TaskList, it seems redundant one. Debug and decide what to leave
       setTask(updatedTask);  // Update the local state after the API call succeeds
     } catch (e) {
       console.error(e);
