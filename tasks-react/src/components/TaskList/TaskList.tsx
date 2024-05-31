@@ -5,6 +5,7 @@ import {createTask, fetchTasks, updateTask} from "../../api/tasks";
 import { taskList } from './TaskList.css';
 import {generateTaskId} from "../../helpers/utils";
 import {button, taskItem} from "../Task/Task.css";
+import TaskContext from '../../contexts/TaskContext';
 
 export const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<ReadonlyArray<Task>>([]);
@@ -49,21 +50,23 @@ export const TaskList: React.FC = () => {
   };
 
   return (
-    <div>
+    <TaskContext.Provider value={tasks}>
+      <div>
         <div className={taskItem}>
           <input type="text" value={newTaskText} onChange={handleNewTaskChange} />
           <button className={button} onClick={handleAdd}>Add</button>
         </div>
-      <ul className={taskList}>
-        {tasks.map((task) => (
-          <TaskComponent
-            key={task.id}
-            task={task}
-            onDelete={handleTaskDelete}
-            onUpdate={handleTaskUpdate}
-          />
-        ))}
-      </ul>
-    </div>
+        <ul className={taskList}>
+          {tasks.map((task) => (
+            <TaskComponent
+              key={task.id}
+              task={task}
+              onDelete={handleTaskDelete}
+              onUpdate={handleTaskUpdate}
+            />
+          ))}
+        </ul>
+      </div>
+    </TaskContext.Provider>
   );
 };

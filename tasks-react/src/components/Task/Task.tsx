@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Task } from "../../models/Task";
 import { updateTask, deleteTask } from "../../api/tasks";
 import {button, checkbox, deleteButton, inputText, inputTextReadonly, taskItem} from './Task.css';
+import TaskContext from '../../contexts/TaskContext';
 
 type TaskProps = {
   task: Task;
@@ -12,6 +13,7 @@ type TaskProps = {
 export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete, onUpdate }) => {
   const [task, setTask] = useState<Task>(initialTask);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const tasksINTaskTSXFromContext = React.useContext(TaskContext);
 
   async function onTaskUpdate(updatedTask: Task) {
     try {
