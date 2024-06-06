@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Task } from "../../models/Task";
-import { updateTask, deleteTask } from "../../api/tasks";
+import { deleteTask } from "../../api/tasks";
 import {button, checkbox, deleteButton, inputText, inputTextReadonly, taskItem} from './Task.css';
-import TaskContext from '../../contexts/TaskContext';
 
 type TaskProps = {
   task: Task;
@@ -11,22 +10,14 @@ type TaskProps = {
 }
 
 export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete, onUpdate }) => {
+
   const [task, setTask] = useState<Task>(initialTask);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const tasksINTaskTSXFromContext = React.useContext(TaskContext);
-
-  async function onTaskUpdate(updatedTask: Task) {
-    try {
-      await updateTask(updatedTask); //todo: since updateTask is also being called in TaskList, it seems redundant one. Debug and decide what to leave
-      setTask(updatedTask);  // Update the local state after the API call succeeds
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   function toggleCompletion() {
     const updatedTask = { ...task, is_completed: !task.is_completed };
-    onTaskUpdate(updatedTask);
+    onUpdate(updatedTask);
+    setTask(updatedTask);
   }
 
   function handleEditClick() {
@@ -60,7 +51,7 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
         type="checkbox"
         checked={task.is_completed}
         className={checkbox}
-        onChange={toggleCompletion} // Toggle completion on change
+        onChange={toggleCompletion}
       />
       {isEditing ? (
         <input
@@ -68,7 +59,7 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
           value={task.text}
           onChange={handleTextChange}
           className={inputText}
-          autoFocus  // Automatically focus the input on edit
+          autoFocus
         />
       ) : (
         <label onDoubleClick={handleEditClick} className={inputTextReadonly}>{task.text}</label> // Double click to edit

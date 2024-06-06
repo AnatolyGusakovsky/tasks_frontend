@@ -6,6 +6,7 @@ export const taskItem = style({
   alignItems: 'center',
   padding: vars.space.medium,
   borderBottom: `1px solid ${vars.color.text}`,
+  fontSize: '16px',
 });
 
 export const button = style({
@@ -33,19 +34,13 @@ export const inputText = style({
   padding: '3px',
   border: `1px solid ${vars.color.lightGrey}`, // Assuming 'lightGrey' is defined in your tokens
   borderRadius: vars.borderRadius,
-  fontSize: '16px',
+  fontSize: '12px',
   color: vars.color.text,
   background: 'white',
   outline: 'none',
 
   // Subtle transition for border and background changes
   transition: 'border-color 0.2s, background-color 0.2s',
-
-  // Focus state styling
-  ':focus': {
-    borderColor: vars.color.primary,
-    boxShadow: `0 0 0 2px ${vars.color.lightBlue}` // Assuming 'lightBlue' is defined
-  },
 
   // Placeholder styling
   '::placeholder': {

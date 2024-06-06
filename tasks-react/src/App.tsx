@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import {TaskList} from "./components/TaskList/TaskList";
+import {TaskContextProvider} from "./contexts/TaskContext";
 
 
 function App() {
@@ -9,7 +10,9 @@ function App() {
       <header className="App-header">
         Tasks App
         <div className="TasksApp">
-          <TaskList/>
+          <TaskContextProvider>
+            <TaskList />
+          </TaskContextProvider>
         </div>
       </header>
     </div>
