@@ -15,19 +15,42 @@ export const TaskList: React.FC = () => {
   };
 
   const handleAdd = async () => {
+    if (!newTaskText) {
+      return;
+    }
     const newTask = { text: newTaskText, is_completed: false, is_deleted: false, id: generateTaskId() };
     await createTask(newTask);
     setNewTaskText('');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAdd();
+    }
+  };
+
+  const todoTasks = tasks.filter(task => !task.is_completed);
+  const completedTasks = tasks.filter(task => task.is_completed);
+
   return (
     <div>
       <div className={taskItem}>
-        <input type="text" value={newTaskText} onChange={handleNewTaskChange} />
+        <input type="text" value={newTaskText} onChange={handleNewTaskChange} onKeyDown={handleKeyDown}/>
         <button className={button} onClick={handleAdd}>Add</button>
       </div>
       <ul className={taskList}>
-        {tasks.map((task) => (
+        {todoTasks.reverse().map((task) => (
+          <TaskComponent
+            key={task.id}
+            task={task}
+            onDelete={deleteTask}
+            onUpdate={updateTask}
+          />
+        ))}
+      </ul>
+      <ul className={taskList}>
+        {completedTasks.map((task) => (
           <TaskComponent
             key={task.id}
             task={task}

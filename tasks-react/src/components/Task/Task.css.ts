@@ -9,6 +9,10 @@ export const taskItem = style({
   fontSize: '16px',
 });
 
+export const completedTask = style({
+  opacity: 0.3,
+});
+
 export const button = style({
   marginLeft: vars.space.small,
   padding: `${vars.space.small} ${vars.space.medium}`,

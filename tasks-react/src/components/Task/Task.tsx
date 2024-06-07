@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Task } from "../../models/Task";
 import { deleteTask } from "../../api/tasks";
-import {button, checkbox, deleteButton, inputText, inputTextReadonly, taskItem} from './Task.css';
+import {button, checkbox, completedTask, deleteButton, inputText, inputTextReadonly, taskItem} from './Task.css';
 
 type TaskProps = {
   task: Task;
@@ -21,6 +21,9 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
   }
 
   function handleEditClick() {
+    if (task.is_completed) {
+      return; // Prevent editing if task is completed
+    }
     if (isEditing) {
       handleSave();  // Save changes when isEditing is true and button is clicked
     }
@@ -45,8 +48,15 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave();
+    }
+  };
+
   return (
-    <li id={`id_${task.id}`} className={taskItem}>
+    <li id={`id_${task.id}`} className={`${taskItem} ${task.is_completed ? completedTask : ''}`}>
       <input
         type="checkbox"
         checked={task.is_completed}
@@ -58,15 +68,18 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
           type="text"
           value={task.text}
           onChange={handleTextChange}
+          onKeyDown={handleKeyDown}
           className={inputText}
           autoFocus
         />
       ) : (
-        <label onDoubleClick={handleEditClick} className={inputTextReadonly}>{task.text}</label> // Double click to edit
+        <label onDoubleClick={task.is_completed ? undefined : handleEditClick} className={inputTextReadonly}>{task.text}</label> // Double click to edit
       )}
-      <button onClick={handleEditClick} className={button}>
-        {isEditing ? "Save" : "Edit"}
-      </button>
+      {!task.is_completed && (
+        <button onClick={handleEditClick} className={button}>
+          {isEditing ? "Save" : "Edit"}
+        </button>
+      )}
       <button onClick={handleDelete} className={deleteButton}>Delete</button>
     </li>
   );
