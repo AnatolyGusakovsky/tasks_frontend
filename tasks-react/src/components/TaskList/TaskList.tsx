@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import { TaskComponent } from '../Task/Task';
-import { taskList } from './TaskList.css';
+import {addButton, addField, taskList} from './TaskList.css';
 import {generateTaskId} from "../../helpers/utils";
 import {button, taskItem} from "../Task/Task.css";
 import TaskContext from '../../contexts/TaskContext';
@@ -35,9 +35,9 @@ export const TaskList: React.FC = () => {
 
   return (
     <div>
-      <div className={taskItem}>
+      <div className={addField}>
         <input type="text" value={newTaskText} onChange={handleNewTaskChange} onKeyDown={handleKeyDown}/>
-        <button className={button} onClick={handleAdd}>Add</button>
+        <button className={addButton} onClick={handleAdd}>Add</button>
       </div>
       <ul className={taskList}>
         {todoTasks.reverse().map((task) => (

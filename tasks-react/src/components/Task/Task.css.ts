@@ -3,6 +3,7 @@ import { vars } from '../../designTokens.css';
 
 export const taskItem = style({
   display: 'flex',
+  justifyContent: 'space-between',
   alignItems: 'center',
   padding: vars.space.medium,
   borderBottom: `1px solid ${vars.color.text}`,
@@ -36,7 +37,7 @@ export const deleteButton = style([
 export const inputText = style({
   flexGrow: 1,
   padding: '3px',
-  border: `1px solid ${vars.color.lightGrey}`, // Assuming 'lightGrey' is defined in your tokens
+  border: `1px solid ${vars.color.lightGrey}`,
   borderRadius: vars.borderRadius,
   fontSize: '12px',
   color: vars.color.text,
@@ -56,6 +57,7 @@ export const inputTextReadonly = style({
   background: 'transparent',
   border: 'none',
   cursor: 'pointer',
+  textAlign: 'left',
 });
 
 export const checkbox = style({
@@ -63,3 +65,13 @@ export const checkbox = style({
   position: 'relative',
   transform: 'scale(2)'
 })
+
+export const checkboxAndTextContainer = style({
+  display: 'flex',
+  alignItems: 'center',
+});
+
+export const buttonsContainer = style({
+  display: 'flex',
+  alignItems: 'center',
+});

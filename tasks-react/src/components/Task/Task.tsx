@@ -1,7 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import { Task } from "../../models/Task";
 import { deleteTask } from "../../api/tasks";
-import {button, checkbox, completedTask, deleteButton, inputText, inputTextReadonly, taskItem} from './Task.css';
+import {
+  button,
+  buttonsContainer,
+  checkbox, checkboxAndTextContainer,
+  completedTask,
+  deleteButton,
+  inputText,
+  inputTextReadonly,
+  taskItem
+} from './Task.css';
 
 type TaskProps = {
   task: Task;
@@ -57,30 +66,34 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
 
   return (
     <li id={`id_${task.id}`} className={`${taskItem} ${task.is_completed ? completedTask : ''}`}>
-      <input
-        type="checkbox"
-        checked={task.is_completed}
-        className={checkbox}
-        onChange={toggleCompletion}
-      />
-      {isEditing ? (
+      <div className={checkboxAndTextContainer}>
         <input
-          type="text"
-          value={task.text}
-          onChange={handleTextChange}
-          onKeyDown={handleKeyDown}
-          className={inputText}
-          autoFocus
+          type="checkbox"
+          checked={task.is_completed}
+          className={checkbox}
+          onChange={toggleCompletion}
         />
-      ) : (
-        <label onDoubleClick={task.is_completed ? undefined : handleEditClick} className={inputTextReadonly}>{task.text}</label> // Double click to edit
-      )}
-      {!task.is_completed && (
-        <button onClick={handleEditClick} className={button}>
-          {isEditing ? "Save" : "Edit"}
-        </button>
-      )}
-      <button onClick={handleDelete} className={deleteButton}>Delete</button>
+        {isEditing ? (
+          <input
+            type="text"
+            value={task.text}
+            onChange={handleTextChange}
+            onKeyDown={handleKeyDown}
+            className={inputText}
+            autoFocus
+          />
+        ) : (
+          <label onDoubleClick={task.is_completed ? undefined : handleEditClick} className={inputTextReadonly}>{task.text}</label>
+        )}
+      </div>
+      <div className={buttonsContainer}>
+        {!task.is_completed && (
+          <button onClick={handleEditClick} className={button}>
+            {isEditing ? "Save" : "Edit"}
+          </button>
+        )}
+        <button onClick={handleDelete} className={deleteButton}>Delete</button>
+      </div>
     </li>
   );
 };
