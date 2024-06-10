@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Task } from "../../models/Task";
-import { updateTask, deleteTask } from "../../api/tasks";
-import {button, checkbox, deleteButton, inputText, inputTextReadonly, taskItem} from './Task.css';
+import { deleteTask } from "../../api/tasks";
+import {
+  button,
+  buttonsContainer,
+  checkbox, checkboxAndTextContainer,
+  completedTask,
+  deleteButton,
+  inputText,
+  inputTextReadonly,
+  taskItem
+} from './Task.css';
 
 type TaskProps = {
   task: Task;
@@ -10,24 +19,20 @@ type TaskProps = {
 }
 
 export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete, onUpdate }) => {
+
   const [task, setTask] = useState<Task>(initialTask);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  async function onTaskUpdate(updatedTask: Task) {
-    try {
-      await updateTask(updatedTask); //todo: since updateTask is also being called in TaskList, it seems redundant one. Debug and decide what to leave
-      setTask(updatedTask);  // Update the local state after the API call succeeds
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   function toggleCompletion() {
     const updatedTask = { ...task, is_completed: !task.is_completed };
-    onTaskUpdate(updatedTask);
+    onUpdate(updatedTask);
+    setTask(updatedTask);
   }
 
   function handleEditClick() {
+    if (task.is_completed) {
+      return; // Prevent editing if task is completed
+    }
     if (isEditing) {
       handleSave();  // Save changes when isEditing is true and button is clicked
     }
@@ -52,29 +57,43 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave();
+    }
+  };
+
   return (
-    <li id={`id_${task.id}`} className={taskItem}>
-      <input
-        type="checkbox"
-        checked={task.is_completed}
-        className={checkbox}
-        onChange={toggleCompletion} // Toggle completion on change
-      />
-      {isEditing ? (
+    <li id={`id_${task.id}`} className={`${taskItem} ${task.is_completed ? completedTask : ''}`}>
+      <div className={checkboxAndTextContainer}>
         <input
-          type="text"
-          value={task.text}
-          onChange={handleTextChange}
-          className={inputText}
-          autoFocus  // Automatically focus the input on edit
+          type="checkbox"
+          checked={task.is_completed}
+          className={checkbox}
+          onChange={toggleCompletion}
         />
-      ) : (
-        <label onDoubleClick={handleEditClick} className={inputTextReadonly}>{task.text}</label> // Double click to edit
-      )}
-      <button onClick={handleEditClick} className={button}>
-        {isEditing ? "Save" : "Edit"}
-      </button>
-      <button onClick={handleDelete} className={deleteButton}>Delete</button>
+        {isEditing ? (
+          <input
+            type="text"
+            value={task.text}
+            onChange={handleTextChange}
+            onKeyDown={handleKeyDown}
+            className={inputText}
+            autoFocus
+          />
+        ) : (
+          <label onDoubleClick={task.is_completed ? undefined : handleEditClick} className={inputTextReadonly}>{task.text}</label>
+        )}
+      </div>
+      <div className={buttonsContainer}>
+        {!task.is_completed && (
+          <button onClick={handleEditClick} className={button}>
+            {isEditing ? "Save" : "Edit"}
+          </button>
+        )}
+        <button onClick={handleDelete} className={deleteButton}>Delete</button>
+      </div>
     </li>
   );
 };
