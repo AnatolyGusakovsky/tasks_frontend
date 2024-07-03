@@ -1,25 +1,28 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import { TaskComponent } from '../Task/Task';
 import {addButton, addField, taskList} from './TaskList.css';
 import {generateTaskId} from "../../helpers/utils";
-import {button, taskItem} from "../Task/Task.css";
-import TaskContext from '../../contexts/TaskContext';
+import { useSelector } from 'react-redux';
+import {Task} from "../../models/Task";
+import {createTask_actionCreator} from "../../redux/actions/actionCreators";
+import store from "../../redux/store";
 
 export const TaskList: React.FC = () => {
 
-  const { tasks, fetchTasks, createTask, deleteTask, updateTask } = useContext(TaskContext);
+  const tasks = useSelector((state:   Task[]) => state);
+
   const [newTaskText, setNewTaskText] = useState<string>('');
 
   const handleNewTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTaskText(e.target.value);
   };
 
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (!newTaskText) {
       return;
     }
     const newTask = { text: newTaskText, is_completed: false, is_deleted: false, id: generateTaskId() };
-    await createTask(newTask);
+    store.dispatch(createTask_actionCreator(newTask));
     setNewTaskText('');
   };
 
@@ -44,8 +47,6 @@ export const TaskList: React.FC = () => {
           <TaskComponent
             key={task.id}
             task={task}
-            onDelete={deleteTask}
-            onUpdate={updateTask}
           />
         ))}
       </ul>
@@ -54,8 +55,6 @@ export const TaskList: React.FC = () => {
           <TaskComponent
             key={task.id}
             task={task}
-            onDelete={deleteTask}
-            onUpdate={updateTask}
           />
         ))}
       </ul>

@@ -7,7 +7,8 @@ export const taskItem = style({
   alignItems: 'center',
   padding: vars.space.medium,
   borderBottom: `1px solid ${vars.color.text}`,
-  fontSize: '16px',
+  fontSize: '15px',
+  width: '600px',
 });
 
 export const completedTask = style({
@@ -28,7 +29,7 @@ export const button = style({
 });
 
 export const deleteButton = style([
-  button, // Reference 'button' directly since it's now a separate definition
+  button,
   {
     background: vars.color.danger // Overrides the 'background' property
   }
@@ -47,18 +48,34 @@ export const inputText = style({
   // Subtle transition for border and background changes
   transition: 'border-color 0.2s, background-color 0.2s',
 
-  // Placeholder styling
   '::placeholder': {
     color: vars.color.grey
   }
 });
 
-export const inputTextReadonly = style({
+const baseTextStyle = {
   background: 'transparent',
   border: 'none',
   cursor: 'pointer',
   textAlign: 'left',
-});
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'pre-wrap',
+  overflowWrap: 'break-word',
+  width: '100%',
+  display: '-webkit-box',
+  '-webkit-box-orient': 'vertical',
+};
+
+export const inputTextReadonly = style({
+  ...baseTextStyle,
+  '-webkit-line-clamp': '3' as any,
+} as any);
+
+export const expandedTextStyle = style({
+  ...baseTextStyle,
+  '-webkit-line-clamp': 'initial' as any,
+} as any);
 
 export const checkbox = style({
   margin: '0 10px',

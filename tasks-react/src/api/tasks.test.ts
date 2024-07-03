@@ -1,22 +1,21 @@
 import MockAdapter from 'axios-mock-adapter';
-import {createTask, deleteTask, fetchTask, fetchTasks, updateTask} from './tasks';
+import {createTask_api, deleteTask_api, fetchTask_api, fetchTasks_api, updateTask_api} from './tasks';
 import axiosApiInstance from './axiosInstance';
 import {Task} from "../models/Task";
-import exp from "constants";
 
-describe('fetchTasks', () => {
+describe('Tasks API tests', () => {
 
-  it('fetchTask() - fetches single Task successfully', async () => {
+  it('fetchTask_api() - fetches single Task successfully', async () => {
     const taskId = "123";
     const mock = new MockAdapter(axiosApiInstance);
     const task = { id: '1', text: "this is a text for test Task", is_completed: false, is_deleted:false };
 
     mock.onGet(`/task/${taskId}`).reply(200, task);
-    const result = await fetchTask(taskId);
+    const result = await fetchTask_api(taskId);
     expect(result).toEqual(task);
   });
 
-  it('fetchTasks() - fetches all tasks successfully', async () => {
+  it('fetchTasks_api() - fetches all tasks successfully', async () => {
     const mock = new MockAdapter(axiosApiInstance);
     const task1:Task = { id: '1', text: "this is a text for test Task", is_completed: false, is_deleted:true };
     const task2:Task = { id: '2', text: "Yhooo", is_completed: true, is_deleted:false };
@@ -25,59 +24,59 @@ describe('fetchTasks', () => {
     tasksArr.push(task1, task2, task3)
 
     mock.onGet(`/tasks/`).reply(200, tasksArr);
-    const response = await fetchTasks();
+    const response = await fetchTasks_api();
     expect(response).toEqual(tasksArr);
   });
 
-  it('updateTask() - updates Task successfully', async ()=>{
+  it('updateTask_api() - updates Task successfully', async ()=>{
     const mock = new MockAdapter(axiosApiInstance);
     const updatedTask:Task = { id: '12345', text: "this is a text for test Task", is_completed: false, is_deleted:true };
     mock.onPut(`/tasks/${updatedTask.id}`).reply(200, updatedTask);
-    const response = await updateTask(updatedTask)
+    const response = await updateTask_api(updatedTask)
     expect(response).toEqual(updatedTask)
   })
 
-  it('updateTask() - handles server errors', async () => {
+  it('updateTask_api() - handles server errors', async () => {
     const mock = new MockAdapter(axiosApiInstance);
     const updatedTask: Task = { id: '12345', text: "this is a text for test Task", is_completed: false, is_deleted: true };
     mock.onPut(`/tasks/${updatedTask.id}`).networkError();
-    await expect(updateTask(updatedTask)).rejects.toThrow();
+    await expect(updateTask_api(updatedTask)).rejects.toThrow();
   });
 
-  it('updateTask() - handles 500 internal server error', async () => {
+  it('updateTask_api() - handles 500 internal server error', async () => {
     const mock = new MockAdapter(axiosApiInstance);
     const updatedTask: Task = { id: '12345', text: "this is a text for test Task", is_completed: false, is_deleted: true };
     mock.onPut(`/tasks/${updatedTask.id}`).reply(500);
-    await expect(updateTask(updatedTask)).rejects.toThrow();
+    await expect(updateTask_api(updatedTask)).rejects.toThrow();
   });
 
-  it('createTask() - updates Task successfully', async ()=>{
+  it('createTask_api() - updates Task successfully', async ()=>{
     const mock = new MockAdapter(axiosApiInstance);
     const task:Task = { id: '12345', text: "this is a text for test Task", is_completed: false, is_deleted:true };
     mock.onPost(`/tasks/`).reply(200, task);
-    const response = await createTask(task)
+    const response = await createTask_api(task)
     expect(response).toEqual(task)
   })
 
-  it('createTask() - handles server errors', async () => {
+  it('createTask_api() - handles server errors', async () => {
     const mock = new MockAdapter(axiosApiInstance);
     const task: Task = { id: '12345', text: "this is a text for test Task", is_completed: false, is_deleted: true };
     mock.onPost(`/tasks/`).networkError();
-    await expect(createTask(task)).rejects.toThrow();
+    await expect(createTask_api(task)).rejects.toThrow();
   });
 
-  it('createTask() - handles 500 internal server error', async () => {
+  it('createTask_api() - handles 500 internal server error', async () => {
     const mock = new MockAdapter(axiosApiInstance);
     const task: Task = { id: '12345', text: "this is a text for test Task", is_completed: false, is_deleted: true };
     mock.onPost(`/tasks/`).reply(500);
-    await expect(createTask(task)).rejects.toThrow();
+    await expect(createTask_api(task)).rejects.toThrow();
   });
 
-  it('deleteTask() - it deletes Task successfully', async () => {
+  it('deleteTask_api() - it deletes Task successfully', async () => {
     const mock = new MockAdapter(axiosApiInstance);
     const taskId: string = "32hk1234k";
     mock.onDelete(`/tasks/${taskId}`).reply(204);
-    await expect(deleteTask(taskId)).resolves.toBeUndefined();
+    await expect(deleteTask_api(taskId)).resolves.toBeUndefined();
   });
 
 });

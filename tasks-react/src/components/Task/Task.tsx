@@ -1,32 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { Task } from "../../models/Task";
-import { deleteTask } from "../../api/tasks";
 import {
   button,
   buttonsContainer,
   checkbox, checkboxAndTextContainer,
   completedTask,
-  deleteButton,
+  deleteButton, expandedTextStyle,
   inputText,
   inputTextReadonly,
   taskItem
 } from './Task.css';
+import {deleteTask_actionCreator, updateTask_actionCreator} from "../../redux/actions/actionCreators";
+import store from "../../redux/store";
 
 type TaskProps = {
   task: Task;
-  onDelete: (taskId: string) => void;
-  onUpdate: (task: Task) => void;
 }
 
-export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete, onUpdate }) => {
+export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask }) => {
 
   const [task, setTask] = useState<Task>(initialTask);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   function toggleCompletion() {
     const updatedTask = { ...task, is_completed: !task.is_completed };
-    onUpdate(updatedTask);
-    setTask(updatedTask);
+    handleUpdate(updatedTask);
   }
 
   function handleEditClick() {
@@ -44,18 +43,18 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
   }
 
   function handleSave() {
-    onUpdate(task);  // Propagate the update upward
+    handleUpdate(task);  // Propagate the update upward
     setIsEditing(false);
   }
 
-  async function handleDelete() {
-    try {
-      await deleteTask(task.id);
-      onDelete(task.id);  // Propagate the deletion upward
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  const handleDelete = () => {
+   store.dispatch(deleteTask_actionCreator(task.id));
+  };
+
+  const handleUpdate = (updatedTask: Task) => {
+    store.dispatch(updateTask_actionCreator(updatedTask));
+    setTask(updatedTask);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -63,6 +62,19 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
       handleSave();
     }
   };
+
+  const handleTextClick = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleShowMoreLessClick = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const taskTextStyle = isExpanded ? expandedTextStyle : inputTextReadonly;
+
+  const charsPerLine = 60;
+  const numLines = Math.ceil(task.text.length / charsPerLine);
 
   return (
     <li id={`id_${task.id}`} className={`${taskItem} ${task.is_completed ? completedTask : ''}`}>
@@ -83,7 +95,11 @@ export const TaskComponent: React.FC<TaskProps> = ({ task: initialTask, onDelete
             autoFocus
           />
         ) : (
-          <label onDoubleClick={task.is_completed ? undefined : handleEditClick} className={inputTextReadonly}>{task.text}</label>
+          <div>
+            <label onClick={handleTextClick} className={taskTextStyle}>{task.text}</label>
+            {numLines > 3 && !isExpanded && <button onClick={handleShowMoreLessClick}>Show more</button>}
+            {isExpanded && <button onClick={handleShowMoreLessClick}>Show less</button>}
+          </div>
         )}
       </div>
       <div className={buttonsContainer}>

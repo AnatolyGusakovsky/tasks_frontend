@@ -1,18 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {TaskList} from "./components/TaskList/TaskList";
-import {TaskContextProvider} from "./contexts/TaskContext";
-
+import store from "./redux/store";
+import {Provider, useDispatch} from "react-redux";
+import {fetchTasks_actionCreator} from "./redux/actions/actionCreators";
 
 function App() {
+
+  useEffect(() => {
+    store.dispatch(fetchTasks_actionCreator())
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
         Tasks App
-        <div className="TasksApp">
-          <TaskContextProvider>
+        <div className="TasksApp" data-testid="TasksApp">
+          <Provider store={store}>
             <TaskList />
-          </TaskContextProvider>
+          </Provider>
         </div>
       </header>
     </div>
